@@ -21,6 +21,8 @@ tonemap_mode = 2
 albedo_color = Color(5.12592e-06, 0.545722, 0.284289, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_truoo"]
+rings = 2
+cap_bottom = false
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_57it4"]
 albedo_color = Color(0.250998, 0.19523, 0.1089, 1)
@@ -64,6 +66,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.577186, -1.03812)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.444805, 1.09677)
 
 [node name="Camera3D" type="Camera3D" parent="World/CameraRig"]
+current = true
 
 [node name="InteractionPoints" type="Node3D" parent="World"]
 
