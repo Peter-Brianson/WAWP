@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://clg6oob4aussi"]
+[gd_scene load_steps=12 format=3 uid="uid://clg6oob4aussi"]
 
 [ext_resource type="Script" path="res://scenes/main/game.gd" id="1_bag06"]
 [ext_resource type="PackedScene" uid="uid://cetbirvf5of8g" path="res://characters/FoxCharacter.tscn" id="1_to8ot"]
 [ext_resource type="PackedScene" uid="uid://tul21na1qoj8" path="res://interactables/book_interactable.tscn" id="3_g805w"]
+[ext_resource type="PackedScene" uid="uid://cquvec1fhepb4" path="res://ui/book/book_ui.tscn" id="4_nrame"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0d62c"]
 sky_top_color = Color(5.39064e-06, 0.80206, 0.88934, 1)
@@ -77,6 +78,8 @@ current = true
 transform = Transform3D(0.167928, 0, -0.108629, 0, 0.2, 0, 0.108629, 0, 0.167928, -0.0467964, 0.22891, 0.366523)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BookUI" parent="CanvasLayer" instance=ExtResource("4_nrame")]
 
 [node name="Audio" type="Node" parent="."]
 

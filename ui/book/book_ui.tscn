@@ -1,0 +1,147 @@
+[gd_scene load_steps=5 format=3 uid="uid://cquvec1fhepb4"]
+
+[ext_resource type="Script" path="res://ui/book/book_ui.gd" id="1_knte7"]
+[ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="2_3l64n"]
+[ext_resource type="Texture2D" uid="uid://ca2ayag74waie" path="res://art/sprites/game book/game book ui.png" id="2_yqnr6"]
+[ext_resource type="Resource" uid="uid://bkmmo6rnvpw4v" path="res://ui/pages/war.tres" id="3_gbwvs"]
+
+[node name="BookUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_knte7")
+game_entries = Array[ExtResource("2_3l64n")]([ExtResource("3_gbwvs")])
+
+[node name="Dimmer" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.196078)
+
+[node name="BookRoot" type="Control" parent="."]
+custom_minimum_size = Vector2(1000, 650)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="BookRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_yqnr6")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LeftPage" type="VBoxContainer" parent="BookRoot"]
+custom_minimum_size = Vector2(300, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -318.0
+offset_top = -256.0
+offset_right = -18.0
+offset_bottom = 344.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.76)
+alignment = 1
+
+[node name="GameTitleLabel" type="Label" parent="BookRoot/LeftPage"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 5
+text = "game title"
+
+[node name="GameDescriptionLabel" type="RichTextLabel" parent="BookRoot/LeftPage"]
+layout_mode = 2
+text = "game desc"
+
+[node name="RulesLabel" type="RichTextLabel" parent="BookRoot/LeftPage"]
+layout_mode = 2
+text = "game rules"
+
+[node name="PlayerCountLabel" type="Label" parent="BookRoot/LeftPage"]
+layout_mode = 2
+text = "players
+"
+
+[node name="RightPage" type="VBoxContainer" parent="BookRoot"]
+custom_minimum_size = Vector2(600, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 61.0
+offset_top = -209.0
+offset_right = 661.0
+offset_bottom = 291.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.8)
+alignment = 1
+
+[node name="StatusLabel" type="Label" parent="BookRoot/RightPage"]
+layout_mode = 2
+text = "status"
+
+[node name="PreferenceLabel" type="RichTextLabel" parent="BookRoot/RightPage"]
+layout_mode = 2
+text = "pref"
+
+[node name="PlayedStampLabel" type="Label" parent="BookRoot/RightPage"]
+layout_mode = 2
+text = "played"
+
+[node name="PreviousButton" type="Button" parent="BookRoot"]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 270.0
+offset_right = 187.0
+offset_bottom = 301.0
+text = "Previous
+"
+
+[node name="NextButton" type="Button" parent="BookRoot"]
+layout_mode = 0
+offset_left = 833.0
+offset_top = 271.0
+offset_right = 878.0
+offset_bottom = 302.0
+text = "Next"
+
+[node name="PlayButton" type="Button" parent="BookRoot"]
+layout_mode = 0
+offset_left = 589.0
+offset_top = 454.0
+offset_right = 630.0
+offset_bottom = 485.0
+text = "Play"
+
+[node name="CloseButton" type="Button" parent="BookRoot"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 91.0
+offset_right = 180.0
+offset_bottom = 122.0
+text = "Close"
