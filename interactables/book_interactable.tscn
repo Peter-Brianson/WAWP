@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://tul21na1qoj8"]
+
+[ext_resource type="Script" path="res://interactables/book_interactable.gd" id="1_fssw0"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_juwmr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iishv"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_n47w6"]
+inner_radius = 0.9
+outer_radius = 0.8
+
+[node name="BookInteractable" type="Node3D"]
+script = ExtResource("1_fssw0")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="BookMesh" type="MeshInstance3D" parent="VisualRoot"]
+transform = Transform3D(1.4, 0, 0, 0, 0.35, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_juwmr")
+
+[node name="BookSprite" type="Sprite3D" parent="VisualRoot"]
+
+[node name="ClickTarget" type="Area3D" parent="."]
+transform = Transform3D(1.4, 0, 0, 0, 0.35, 0, 0, 0, 1, 0, 0.2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ClickTarget"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("BoxShape3D_iishv")
+
+[node name="SelectionRoot" type="Node3D" parent="."]
+visible = false
+
+[node name="SelectionRing" type="MeshInstance3D" parent="SelectionRoot"]
+transform = Transform3D(1.5, 0, 0, 0, 0.1, 0, 0, 0, 1.5, 0, 0, 0)
+mesh = SubResource("TorusMesh_n47w6")
+
+[node name="PromptLabel3D" type="Label3D" parent="SelectionRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+billboard = 1
+text = " Read Book
+"
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
