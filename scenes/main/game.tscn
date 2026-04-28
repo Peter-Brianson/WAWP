@@ -60,7 +60,7 @@ material = SubResource("StandardMaterial3D_57it4")
 [node name="Animals" type="Node3D" parent="World"]
 
 [node name="BaseCharacter" parent="World/Animals" instance=ExtResource("1_to8ot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.577186, -1.03812)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.992434)
 
 [node name="CameraRig" type="Node3D" parent="World"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.444805, 1.09677)
