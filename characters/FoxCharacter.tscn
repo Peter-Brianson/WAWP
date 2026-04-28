@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://cetbirvf5of8g"]
+
+[ext_resource type="Script" path="res://characters/BaseCharacter.gd" id="1_lg4ir"]
+[ext_resource type="Resource" uid="uid://bq5ng3by8bsnq" path="res://characters/resources/Fox/fox_definition.tres" id="2_ym5jf"]
+[ext_resource type="Texture2D" uid="uid://7lymtn0pnowi" path="res://icon.svg" id="3_4ripc"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l6wbr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_4ripc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ui6dj"]
+
+[node name="BaseCharacter" type="Node3D"]
+script = ExtResource("1_lg4ir")
+definition = ExtResource("2_ym5jf")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="Sprite3D" type="AnimatedSprite3D" parent="VisualRoot"]
+billboard = 2
+sprite_frames = SubResource("SpriteFrames_l6wbr")
+
+[node name="DialogueAnchor" type="Marker3D" parent="."]
+
+[node name="BehaviorHolder" type="Node" parent="."]
+
+[node name="InteractionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+shape = SubResource("BoxShape3D_ui6dj")
+
+[node name="VoicePlayer3D" type="AudioStreamPlayer3D" parent="."]

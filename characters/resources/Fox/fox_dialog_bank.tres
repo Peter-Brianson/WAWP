@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CharacterDialogueBank" load_steps=3 format=3 uid="uid://n4hficd8tehu"]
+
+[ext_resource type="Script" path="res://characters/resources/character_dialogue_line.gd" id="1_hoqt2"]
+[ext_resource type="Script" path="res://characters/resources/character_dialogue_bank.gd" id="2_xpuss"]
+
+[resource]
+script = ExtResource("2_xpuss")
+lines = Array[ExtResource("1_hoqt2")]([null])

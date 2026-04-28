@@ -1,0 +1,74 @@
+[gd_scene load_steps=9 format=3 uid="uid://clg6oob4aussi"]
+
+[ext_resource type="PackedScene" uid="uid://cetbirvf5of8g" path="res://characters/FoxCharacter.tscn" id="1_to8ot"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0d62c"]
+sky_top_color = Color(5.39064e-06, 0.80206, 0.88934, 1)
+sky_horizon_color = Color(0.550001, 0.742765, 0.755585, 1)
+ground_horizon_color = Color(0.550001, 0.742765, 0.755585, 1)
+
+[sub_resource type="Sky" id="Sky_b2a33"]
+sky_material = SubResource("ProceduralSkyMaterial_0d62c")
+
+[sub_resource type="Environment" id="Environment_qewrt"]
+background_mode = 2
+sky = SubResource("Sky_b2a33")
+tonemap_mode = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_v8ci3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_11ho0"]
+albedo_color = Color(5.12592e-06, 0.545722, 0.284289, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_truoo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_57it4"]
+albedo_color = Color(0.250998, 0.19523, 0.1089, 1)
+
+[node name="Game" type="Node"]
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="Enviroment" type="Node3D" parent="World"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World/Enviroment"]
+environment = SubResource("Environment_qewrt")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World/Enviroment"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 1.01788, 0)
+shadow_enabled = true
+
+[node name="ForestPath" type="Node3D" parent="World"]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="World/ForestPath"]
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
+use_collision = true
+mesh = SubResource("PlaneMesh_v8ci3")
+material = SubResource("StandardMaterial3D_11ho0")
+
+[node name="StumpTableArea" type="Node3D" parent="World"]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="World/StumpTableArea"]
+transform = Transform3D(1, 0, 0, 0, 0.2, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_truoo")
+material = SubResource("StandardMaterial3D_57it4")
+
+[node name="HumanBoy" type="Node3D" parent="World"]
+
+[node name="Animals" type="Node3D" parent="World"]
+
+[node name="BaseCharacter" parent="World/Animals" instance=ExtResource("1_to8ot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.577186, -1.03812)
+
+[node name="CameraRig" type="Node3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.444805, 1.09677)
+
+[node name="Camera3D" type="Camera3D" parent="World/CameraRig"]
+
+[node name="InteractionPoints" type="Node3D" parent="World"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="GameFlow" type="Node" parent="."]

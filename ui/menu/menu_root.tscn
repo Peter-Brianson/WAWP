@@ -1,0 +1,48 @@
+[gd_scene load_steps=9 format=3 uid="uid://ckb04yu443ifh"]
+
+[ext_resource type="Script" path="res://ui/menu/menu_root.gd" id="1_ha702"]
+[ext_resource type="PackedScene" uid="uid://xs6jnvhrynn7" path="res://ui/menu/intro_screen.tscn" id="2_0p67n"]
+[ext_resource type="PackedScene" uid="uid://dqrsqdmscdxg8" path="res://ui/menu/start_screen.tscn" id="3_f876v"]
+[ext_resource type="PackedScene" uid="uid://c1v25gh7xt0xh" path="res://ui/menu/main_menu_screen.tscn" id="4_r3s4v"]
+[ext_resource type="PackedScene" uid="uid://dbvefhyr3gcou" path="res://ui/menu/save_list_screen.tscn" id="5_jnfvl"]
+[ext_resource type="PackedScene" uid="uid://ca07e54n1gq86" path="res://ui/menu/options_screen.tscn" id="6_ewywg"]
+[ext_resource type="PackedScene" uid="uid://cwprgh7ias5hm" path="res://ui/menu/controls_screen.tscn" id="7_0b17c"]
+[ext_resource type="PackedScene" uid="uid://cgvyqam2qndih" path="res://ui/menu/glossary_screen.tscn" id="8_sophy"]
+
+[node name="MenuRoot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ha702")
+
+[node name="Screens" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IntroScreen" parent="Screens" instance=ExtResource("2_0p67n")]
+layout_mode = 1
+
+[node name="StartScreen" parent="Screens" instance=ExtResource("3_f876v")]
+layout_mode = 1
+
+[node name="MainMenuScreen" parent="Screens" instance=ExtResource("4_r3s4v")]
+layout_mode = 1
+
+[node name="SaveListScreen" parent="Screens" instance=ExtResource("5_jnfvl")]
+layout_mode = 1
+
+[node name="OptionsScreen" parent="Screens" instance=ExtResource("6_ewywg")]
+layout_mode = 1
+
+[node name="ControlsScreen" parent="Screens" instance=ExtResource("7_0b17c")]
+layout_mode = 1
+
+[node name="GlossaryScreen" parent="Screens" instance=ExtResource("8_sophy")]
+layout_mode = 1

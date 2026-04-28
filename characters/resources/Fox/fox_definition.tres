@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=5 format=3 uid="uid://bq5ng3by8bsnq"]
+
+[ext_resource type="Resource" uid="uid://n4hficd8tehu" path="res://characters/resources/Fox/fox_dialog_bank.tres" id="1_viwmc"]
+[ext_resource type="Script" path="res://characters/resources/character_game_preference.gd" id="3_jommq"]
+[ext_resource type="Script" path="res://characters/resources/character_definition.gd" id="4_nknuv"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0l87c"]
+
+[resource]
+script = ExtResource("4_nknuv")
+character_id = &"fox"
+display_name = "fox"
+species = "Fox"
+sprite_frames = SubResource("SpriteFrames_0l87c")
+idle_animation = &"idle"
+additional_idle_animation = &"idle 2"
+talk_animation = &"talk"
+emote_animation = &"emote"
+win_animation = &"win"
+lose_animation = &"lose"
+draw_animation = &"draw"
+hit_animation = &"hit"
+sprite_offset = Vector3(0, 1, 0)
+sprite_scale = Vector3(1, 1, 1)
+pixel_size = 0.01
+voice_pitch = 1.0
+dialogue_bank = ExtResource("1_viwmc")
+game_preferences = Array[ExtResource("3_jommq")]([])
