@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://m2oga057et6y"]
+
+[ext_resource type="Script" path="res://gameplay/card_games/war/war_game.gd" id="1_c2aqm"]
+
+[node name="WarGame" type="Node3D"]
+script = ExtResource("1_c2aqm")
+
+[node name="CardsRoot" type="Node3D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]

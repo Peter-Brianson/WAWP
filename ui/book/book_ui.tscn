@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://ui/book/book_ui.gd" id="1_knte7"]
 [ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="2_3l64n"]
 [ext_resource type="Texture2D" uid="uid://ca2ayag74waie" path="res://art/sprites/game book/game book ui.png" id="2_yqnr6"]
-[ext_resource type="Resource" uid="uid://bkmmo6rnvpw4v" path="res://ui/pages/war.tres" id="3_gbwvs"]
+[ext_resource type="Resource" uid="uid://bkmmo6rnvpw4v" path="res://ui/book/entries/war.tres" id="3_gbwvs"]
 
 [node name="BookUI" type="Control"]
 layout_mode = 3

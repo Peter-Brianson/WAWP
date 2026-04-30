@@ -210,10 +210,12 @@ func _select_current_game() -> void:
 	if not _is_entry_unlocked(entry):
 		return
 
-	game_selected.emit(entry.game_id, entry)
+	var selected_game_id := entry.game_id
 
 	if close_after_game_selected:
 		close_book()
+
+	game_selected.emit(selected_game_id, entry)
 
 
 func _get_current_entry() -> BookGameEntry:

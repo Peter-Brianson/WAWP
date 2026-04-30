@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3 uid="uid://bkmmo6rnvpw4v"]
+
+[ext_resource type="PackedScene" uid="uid://m2oga057et6y" path="res://gameplay/card_games/war/war_game.tscn" id="1_0tpma"]
+[ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="2_nhcui"]
+
+[resource]
+script = ExtResource("2_nhcui")
+game_id = &"war"
+display_name = "War"
+description = "A simple card battle where bigger cards win."
+rules_summary = "Each player flips a card. Highest card takes the pile. Ties can start a war."
+min_players = 2
+max_players = 8
+starts_unlocked = true
+min_boredom_required = 0
+min_games_played_required = 0
+minigame_scene = ExtResource("1_0tpma")
