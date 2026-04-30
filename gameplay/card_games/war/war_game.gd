@@ -175,8 +175,7 @@ func _build_standard_deck() -> Array[Dictionary]:
 
 
 func _animate_initial_deal() -> void:
-	var count := clamp(visual_deal_cards, 0, 52)
-
+	var count: int = clampi(visual_deal_cards, 0, 52)
 	for i in range(count):
 		var target := player_deck_position if i % 2 == 0 else fox_deck_position
 		target += Vector3(randf_range(-0.035, 0.035), 0.0, randf_range(-0.035, 0.035))
@@ -258,7 +257,8 @@ func _play_battle() -> void:
 
 
 func _burn_war_cards(deck: Array[Dictionary], pot: Array[Dictionary]) -> void:
-	var burn_count := min(3, max(deck.size() - 1, 0))
+	var available_burn_cards: int = maxi(deck.size() - 1, 0)
+	var burn_count: int = mini(3, available_burn_cards)
 
 	for i in range(burn_count):
 		pot.append(deck.pop_back())

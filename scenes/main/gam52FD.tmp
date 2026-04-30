@@ -65,7 +65,7 @@ material = SubResource("StandardMaterial3D_57it4")
 [node name="SeatAnchors" type="Node3D" parent="World/StumpTableArea"]
 
 [node name="CenterDeck" type="Marker3D" parent="World/StumpTableArea/SeatAnchors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 
 [node name="PlayerSeat" type="Marker3D" parent="World/StumpTableArea/SeatAnchors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002, 0, 0.65)
