@@ -10,6 +10,7 @@ signal game_finished(game_id: StringName, result: Dictionary)
 @export var active_game_root_path: NodePath = ^"../../World/StumpTableArea/CardGameRoot"
 @export var fox_path: NodePath = ^"../../World/Animals/fox"
 @export var human_boy_path: NodePath = ^"../../World/HumanBoy"
+@export var player_hand_ui_path: NodePath = ^"../../CanvasLayer/PlayerHandUI"
 
 @export_group("Seat Markers")
 @export var center_deck_marker_path: NodePath = ^"../../World/StumpTableArea/SeatAnchors/CenterDeck"
@@ -40,33 +41,25 @@ func start_card_game(entry: BookGameEntry) -> void:
 	if entry == null:
 		push_warning("TableGameTransition.start_card_game called with null entry.")
 		return
-
 	if entry.minigame_scene == null:
 		push_warning("BookGameEntry '%s' has no minigame_scene assigned." % String(entry.game_id))
 		return
-
 	if transition_running:
 		return
 
 	transition_running = true
 	active_game_id = entry.game_id
-
 	transition_started.emit(active_game_id)
-
 	clear_active_game()
-
 	await _move_camera_to_table()
 	await _gather_players_to_table()
-
 	_load_game(entry)
-
 	transition_running = false
 
 
 func clear_active_game() -> void:
 	if active_game != null and is_instance_valid(active_game):
 		active_game.queue_free()
-
 	active_game = null
 
 
@@ -75,12 +68,10 @@ func _move_camera_to_table() -> void:
 	if camera_rig == null:
 		push_warning("TableGameTransition could not find CameraRig.")
 		return
-
 	var tween := create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(camera_rig, "position", table_camera_position, camera_move_time)
 	tween.tween_property(camera_rig, "rotation_degrees", table_camera_rotation_degrees, camera_move_time)
-
 	await tween.finished
 
 
@@ -90,7 +81,6 @@ func _gather_players_to_table() -> void:
 
 	var tween := create_tween()
 	tween.set_parallel(true)
-
 	var did_tween := false
 
 	var fox := get_node_or_null(fox_path) as Node3D
@@ -109,7 +99,6 @@ func _gather_players_to_table() -> void:
 
 func _load_game(entry: BookGameEntry) -> void:
 	var active_root := get_node_or_null(active_game_root_path)
-
 	if active_root == null:
 		push_warning("TableGameTransition could not find CardGameRoot. Loading game under transition node.")
 		active_root = self
@@ -119,10 +108,8 @@ func _load_game(entry: BookGameEntry) -> void:
 
 	if active_game.has_signal("game_finished"):
 		active_game.connect("game_finished", Callable(self, "_on_active_game_finished"))
-
 	if active_game.has_method("configure_card_game"):
 		active_game.call("configure_card_game", _build_game_context())
-
 	if active_game.has_method("start_game"):
 		active_game.call("start_game")
 
@@ -135,7 +122,8 @@ func _build_game_context() -> Dictionary:
 		"center_deck_global": _get_marker_global_position(center_deck_marker_path, fallback_center_deck_local),
 		"player_seat_global": _get_marker_global_position(player_seat_marker_path, fallback_player_seat_local),
 		"fox_seat_global": _get_marker_global_position(fox_seat_marker_path, fallback_fox_seat_local),
-		"player_ids": [&"player", &"fox"]
+		"player_ids": [&"player", &"fox"],
+		"player_hand_ui": get_node_or_null(player_hand_ui_path)
 	}
 
 
@@ -154,6 +142,5 @@ func _get_marker_global_position(marker_path: NodePath, fallback_local: Vector3)
 func _on_active_game_finished(result: Dictionary = {}) -> void:
 	if post_game_hold_time > 0.0:
 		await get_tree().create_timer(post_game_hold_time).timeout
-
 	clear_active_game()
 	game_finished.emit(active_game_id, result)
