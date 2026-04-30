@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3 uid="uid://p7gym4dow6c8"]
+
+[ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="1_hy2es"]
+[ext_resource type="PackedScene" uid="uid://elq082nh5f2m" path="res://gameplay/card_games/poker/poker_game.tscn" id="1_vktse"]
+
+[resource]
+script = ExtResource("1_hy2es")
+game_id = &"poker"
+display_name = "Poker"
+description = ""
+rules_summary = ""
+min_players = 2
+max_players = 8
+starts_unlocked = true
+min_boredom_required = 0
+min_games_played_required = 0
+minigame_scene = ExtResource("1_vktse")

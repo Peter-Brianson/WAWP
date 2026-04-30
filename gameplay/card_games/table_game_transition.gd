@@ -11,6 +11,7 @@ signal game_finished(game_id: StringName, result: Dictionary)
 @export var fox_path: NodePath = ^"../../World/Animals/fox"
 @export var human_boy_path: NodePath = ^"../../World/HumanBoy"
 @export var player_hand_ui_path: NodePath = ^"../../CanvasLayer/PlayerHandUI"
+@export var table_card_renderer_path: NodePath = ^"../../World/StumpTableArea/TableCardRenderer"
 
 @export_group("Seat Markers")
 @export var center_deck_marker_path: NodePath = ^"../../World/StumpTableArea/SeatAnchors/CenterDeck"
@@ -60,7 +61,12 @@ func start_card_game(entry: BookGameEntry) -> void:
 func clear_active_game() -> void:
 	if active_game != null and is_instance_valid(active_game):
 		active_game.queue_free()
+
 	active_game = null
+
+	var table_renderer := get_node_or_null(table_card_renderer_path)
+	if table_renderer != null and table_renderer.has_method("clear_all_cards"):
+		table_renderer.call("clear_all_cards")
 
 
 func _move_camera_to_table() -> void:
@@ -123,7 +129,8 @@ func _build_game_context() -> Dictionary:
 		"player_seat_global": _get_marker_global_position(player_seat_marker_path, fallback_player_seat_local),
 		"fox_seat_global": _get_marker_global_position(fox_seat_marker_path, fallback_fox_seat_local),
 		"player_ids": [&"player", &"fox"],
-		"player_hand_ui": get_node_or_null(player_hand_ui_path)
+		"player_hand_ui": get_node_or_null(player_hand_ui_path),
+		"table_card_renderer": get_node_or_null(table_card_renderer_path)
 	}
 
 

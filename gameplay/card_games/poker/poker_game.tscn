@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://elq082nh5f2m"]
+
+[ext_resource type="Script" path="res://gameplay/card_games/poker/poker_game.gd" id="1_68axc"]
+
+[node name="PokerGame" type="Node3D"]
+script = ExtResource("1_68axc")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
