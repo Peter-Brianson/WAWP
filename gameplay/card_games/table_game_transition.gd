@@ -12,6 +12,7 @@ signal game_finished(game_id: StringName, result: Dictionary)
 @export var human_boy_path: NodePath = ^"../../World/HumanBoy"
 @export var player_hand_ui_path: NodePath = ^"../../CanvasLayer/PlayerHandUI"
 @export var table_card_renderer_path: NodePath = ^"../../World/StumpTableArea/TableCardRenderer"
+@export var win_popup_ui_path: NodePath = ^"../../CanvasLayer/WinPopupUI"
 
 @export_group("Seat Markers")
 @export var center_deck_marker_path: NodePath = ^"../../World/StumpTableArea/SeatAnchors/CenterDeck"
@@ -147,7 +148,18 @@ func _get_marker_global_position(marker_path: NodePath, fallback_local: Vector3)
 
 
 func _on_active_game_finished(result: Dictionary = {}) -> void:
-	if post_game_hold_time > 0.0:
-		await get_tree().create_timer(post_game_hold_time).timeout
+	await _show_win_popup(result)
+
 	clear_active_game()
 	game_finished.emit(active_game_id, result)
+
+func _show_win_popup(result: Dictionary) -> void:
+	var win_popup: WinPopupUI = get_node_or_null(win_popup_ui_path) as WinPopupUI
+
+	if win_popup == null:
+		if post_game_hold_time > 0.0:
+			await get_tree().create_timer(post_game_hold_time).timeout
+		return
+
+	win_popup.show_result(active_game_id, result)
+	await win_popup.next_requested

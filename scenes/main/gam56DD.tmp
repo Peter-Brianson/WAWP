@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://clg6oob4aussi"]
+[gd_scene load_steps=19 format=3 uid="uid://clg6oob4aussi"]
 
 [ext_resource type="Script" path="res://scenes/main/game.gd" id="1_bag06"]
 [ext_resource type="PackedScene" uid="uid://cetbirvf5of8g" path="res://characters/FoxCharacter.tscn" id="1_to8ot"]
@@ -11,7 +11,6 @@
 [ext_resource type="Resource" path="res://ui/book/entries/go_fish.tres" id="7_jq6wb"]
 [ext_resource type="PackedScene" path="res://ui/cards/player_hand_ui.tscn" id="8_f4ykx"]
 [ext_resource type="Resource" uid="uid://p7gym4dow6c8" path="res://ui/book/entries/poker.tres" id="9_s8aqf"]
-[ext_resource type="Script" path="res://ui/results/win_popup_ui.gd" id="11_g8vpk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0d62c"]
 sky_top_color = Color(5.39064e-06, 0.80206, 0.88934, 1)
@@ -107,15 +106,6 @@ transform = Transform3D(0.167928, 0, -0.108629, 0, 0.2, 0, 0.108629, 0, 0.167928
 game_entries = Array[ExtResource("5_tfp5t")]([ExtResource("6_l10oj"), ExtResource("7_jq6wb"), ExtResource("9_s8aqf")])
 
 [node name="PlayerHandUI" parent="CanvasLayer" instance=ExtResource("8_f4ykx")]
-
-[node name="WinPopupUI" type="Control" parent="CanvasLayer"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("11_g8vpk")
 
 [node name="Audio" type="Node" parent="."]
 
