@@ -1,17 +1,17 @@
-[gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3 uid="uid://p7gym4dow6c8"]
+[gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="1_hy2es"]
-[ext_resource type="PackedScene" uid="uid://elq082nh5f2m" path="res://gameplay/card_games/poker/poker_game.tscn" id="1_vktse"]
+[ext_resource type="PackedScene" path="res://gameplay/card_games/poker/poker_game.tscn" id="1_poker"]
+[ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="2_entry"]
 
 [resource]
-script = ExtResource("1_hy2es")
+script = ExtResource("2_entry")
 game_id = &"poker"
 display_name = "Poker"
-description = ""
-rules_summary = ""
+description = "A bluffing and betting card game with hidden cards and shared community cards."
+rules_summary = "Each player gets two hidden cards. Community cards are dealt as the flop, turn, and river. Click your chips to bet or raise. Use Call/Check or Fold under your hand."
 min_players = 2
 max_players = 8
 starts_unlocked = true
 min_boredom_required = 0
 min_games_played_required = 0
-minigame_scene = ExtResource("1_vktse")
+minigame_scene = ExtResource("1_poker")

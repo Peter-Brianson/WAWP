@@ -16,9 +16,7 @@ func build_theme() -> void:
 
 	_create_label_variation(theme, &"GameTitleLabel", 28, 6)
 	_create_label_variation(theme, &"GameStatusLabel", 18, 4)
-
 	_create_panel_variation(theme, &"GamePanel")
-
 	_create_button_variation(theme, &"GameButton")
 	_create_card_button_variation(theme, &"CardButton", Color(0.93, 0.84, 0.62, 1.0), Color(0.20, 0.12, 0.06, 1.0), 2)
 	_create_card_button_variation(theme, &"HoveredCardButton", Color(1.0, 0.92, 0.62, 1.0), Color(0.18, 0.45, 0.16, 1.0), 4)

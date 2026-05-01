@@ -1,17 +1,17 @@
 [gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3]
 
-[ext_resource type="PackedScene" path="res://gameplay/card_games/go_fish/go_fish_game.tscn" id="1_7h0f3"]
-[ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="2_kfbig"]
+[ext_resource type="PackedScene" path="res://gameplay/card_games/go_fish/go_fish_game.tscn" id="1_gofish"]
+[ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="2_entry"]
 
 [resource]
-script = ExtResource("2_kfbig")
+script = ExtResource("2_entry")
 game_id = &"go_fish"
 display_name = "Go Fish"
-description = "Ask another player for ranks, collect sets of four, and fish from the deck when they have none."
-rules_summary = "Choose a rank from your hand and ask Fox for it. If Fox has that rank, you take all matching cards and ask again. If not, go fish from the deck. Four of a rank becomes a book. Most books wins."
+description = "Ask other players for ranks and collect books of four."
+rules_summary = "Choose a rank from your hand and ask Fox for it. If Fox has that rank, you take all of them and go again. If not, click the deck to Go Fish."
 min_players = 2
 max_players = 8
 starts_unlocked = true
 min_boredom_required = 0
 min_games_played_required = 0
-minigame_scene = ExtResource("1_7h0f3")
+minigame_scene = ExtResource("1_gofish")

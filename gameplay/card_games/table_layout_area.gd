@@ -33,8 +33,8 @@ func _process(_delta: float) -> void:
 		_update_debug_bounds()
 
 
-func clamp_global_position(global_position: Vector3, margin: float = 0.0) -> Vector3:
-	var local_position: Vector3 = to_local(global_position)
+func clamp_global_position(_global_position: Vector3, margin: float = 0.0) -> Vector3:
+	var local_position: Vector3 = to_local(_global_position)
 	var safe_margin: float = edge_padding + margin
 
 	local_position.x = clampf(
@@ -87,7 +87,6 @@ func get_community_card_global(index: int, total_cards: int) -> Vector3:
 	var total_width: float = card_spacing * float(count - 1)
 	var start_x: float = -total_width * 0.5
 	var x: float = start_x + card_spacing * float(index)
-
 	var local_position: Vector3 = Vector3(x, table_y, 0.0)
 	return to_global(clamp_local_position(local_position, stack_margin))
 

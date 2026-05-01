@@ -1,6 +1,8 @@
 extends Node3D
 class_name TableCardRenderer
 
+signal table_piece_clicked(group_id: StringName, piece: Node3D, event: InputEvent)
+
 @export_group("Card Size")
 @export var card_size: Vector3 = Vector3(0.145, 0.01, 0.205)
 @export_range(0.001, 0.05, 0.001) var label_pixel_size: float = 0.0038
@@ -36,6 +38,11 @@ class_name TableCardRenderer
 @export var card_sprite_render_priority: int = -20
 @export var label_render_priority: int = 100
 @export var force_label_depth_overlay: bool = true
+
+@export_group("Click Targets")
+@export var add_click_targets: bool = true
+@export var click_target_height: float = 0.10
+@export var click_target_scale: Vector2 = Vector2(1.25, 1.25)
 
 var table_layout_area: Node = null
 
@@ -85,6 +92,7 @@ func show_card(
 			sprite.rotation_degrees.x = -90.0
 			_style_card_sprite(sprite)
 			root.add_child(sprite)
+			_add_click_target(root, group_id, 1)
 			return root
 
 	var body: CSGBox3D = CSGBox3D.new()
@@ -102,6 +110,7 @@ func show_card(
 	_style_table_label(label)
 	root.add_child(label)
 
+	_add_click_target(root, group_id, 1)
 	return root
 
 
@@ -162,7 +171,60 @@ func show_stack(
 		_style_table_label(label)
 		root.add_child(label)
 
+	_add_click_target(root, group_id, shown_count)
 	return root
+
+
+func _add_click_target(root: Node3D, group_id: StringName, stack_count: int = 1) -> void:
+	if not add_click_targets:
+		return
+
+	if root == null:
+		return
+
+	var area: Area3D = Area3D.new()
+	area.name = "ClickTarget"
+	area.input_ray_pickable = true
+	area.monitoring = true
+	area.monitorable = true
+	root.add_child(area)
+
+	var shape: CollisionShape3D = CollisionShape3D.new()
+	shape.name = "CollisionShape3D"
+
+	var box: BoxShape3D = BoxShape3D.new()
+	var spread_bonus: float = float(maxi(stack_count - 1, 0)) * stack_spread
+	box.size = Vector3(
+		(card_size.x + spread_bonus) * click_target_scale.x,
+		click_target_height,
+		(card_size.z + spread_bonus) * click_target_scale.y
+	)
+
+	shape.shape = box
+	shape.position = Vector3(0.0, click_target_height * 0.5, 0.0)
+	area.add_child(shape)
+
+	area.input_event.connect(_on_click_target_input_event.bind(group_id, root))
+
+
+func _on_click_target_input_event(
+	camera: Camera3D,
+	event: InputEvent,
+	event_position: Vector3,
+	normal: Vector3,
+	shape_idx: int,
+	group_id: StringName,
+	piece: Node3D
+) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+			table_piece_clicked.emit(group_id, piece, event)
+
+	if event is InputEventScreenTouch:
+		var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
+		if touch_event.pressed:
+			table_piece_clicked.emit(group_id, piece, event)
 
 
 func _style_card_sprite(sprite: Sprite3D) -> void:
@@ -172,8 +234,6 @@ func _style_card_sprite(sprite: Sprite3D) -> void:
 	sprite.shaded = true
 	sprite.no_depth_test = false
 	sprite.render_priority = card_sprite_render_priority
-
-	# Keep card sprites from doing hard alpha/depth cuts that can eat Label3D outlines.
 	sprite.alpha_cut = 0
 
 
@@ -184,15 +244,11 @@ func _style_table_label(label: Label3D) -> void:
 	label.modulate = table_text_color
 	label.outline_modulate = table_text_outline_color
 	label.outline_size = table_text_outline_size
-
-	# Important: makes labels draw like an overlay above the card sprites.
 	label.no_depth_test = force_label_depth_overlay or table_text_no_depth_test
 	label.shaded = table_text_shaded
 	label.fixed_size = table_text_fixed_size
 	label.billboard = label_billboard_mode
 	label.render_priority = label_render_priority
-
-	# Prevents hard alpha clipping from cutting the outline where it intersects sprites.
 	label.alpha_cut = 0
 
 
