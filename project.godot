@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 SaveManager="*res://autoload/save_manager.gd"
 
+[gui]
+
+theme/custom="res://ui/themes/wawp_ui_theme.tres"
+theme/custom_font="res://ui/themes/Your Doodle Font.ttf"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
