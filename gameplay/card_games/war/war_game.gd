@@ -13,6 +13,7 @@ const SUITS: Array[String] = ["♠", "♥", "♦", "♣"]
 @export var fox_deck_position: Vector3 = Vector3(0.0, 0.36, -0.62)
 @export var player_face_up_position: Vector3 = Vector3(-0.22, 0.39, 0.18)
 @export var fox_face_up_position: Vector3 = Vector3(0.22, 0.39, -0.18)
+@export var war_pot_position: Vector3 = Vector3(0.0, 0.40, 0.0)
 
 @export_group("Deal Animation")
 @export_range(0, 52, 1) var visual_deal_cards: int = 16
@@ -23,8 +24,9 @@ const SUITS: Array[String] = ["♠", "♥", "♦", "♣"]
 @export_range(0.05, 2.0, 0.05) var flip_move_time: float = 0.22
 @export_range(0.05, 2.0, 0.05) var result_pause_time: float = 0.45
 
-@onready var cards_root: Node3D = get_node_or_null("CardsRoot") as Node3D
 @onready var canvas_layer: CanvasLayer = get_node_or_null("CanvasLayer") as CanvasLayer
+
+var table_cards: TableCardRenderer = null
 
 var player_deck: Array[Dictionary] = []
 var fox_deck: Array[Dictionary] = []
@@ -37,7 +39,6 @@ var end_button: Button
 var ready_to_play: bool = false
 var busy: bool = false
 var round_number: int = 0
-var face_up_nodes: Array[Node] = []
 
 
 func _ready() -> void:
@@ -47,17 +48,27 @@ func _ready() -> void:
 
 
 func configure_card_game(context: Dictionary) -> void:
+	if context.has("table_card_renderer"):
+		table_cards = context["table_card_renderer"] as TableCardRenderer
+
+	if table_cards == null:
+		push_warning("WarGame could not find shared TableCardRenderer. Creating fallback renderer.")
+		table_cards = TableCardRenderer.new()
+		table_cards.name = "FallbackTableCardRenderer"
+		add_child(table_cards)
+
 	if context.has("center_deck_global"):
-		center_deck_position = to_local(context["center_deck_global"])
+		center_deck_position = table_cards.to_local(context["center_deck_global"])
 
 	if context.has("player_seat_global"):
-		player_deck_position = to_local(context["player_seat_global"]) + Vector3(0.0, 0.04, 0.0)
+		player_deck_position = table_cards.to_local(context["player_seat_global"]) + Vector3(0.0, 0.04, 0.0)
 
 	if context.has("fox_seat_global"):
-		fox_deck_position = to_local(context["fox_seat_global"]) + Vector3(0.0, 0.04, 0.0)
+		fox_deck_position = table_cards.to_local(context["fox_seat_global"]) + Vector3(0.0, 0.04, 0.0)
 
-	player_face_up_position = center_deck_position + Vector3(-0.24, 0.04, 0.14)
-	fox_face_up_position = center_deck_position + Vector3(0.24, 0.04, -0.14)
+	player_face_up_position = center_deck_position + Vector3(-0.26, 0.06, 0.14)
+	fox_face_up_position = center_deck_position + Vector3(0.26, 0.06, -0.14)
+	war_pot_position = center_deck_position + Vector3(0.0, 0.05, 0.0)
 
 
 func start_game() -> void:
@@ -70,22 +81,22 @@ func start_game() -> void:
 
 	_deal_cards()
 
+	if table_cards != null:
+		table_cards.clear_all_cards()
+
 	await _animate_initial_deal()
+
+	_redraw_table()
 
 	ready_to_play = true
 	busy = false
 	_set_buttons_enabled(true)
 
-	status_label.text = "Cards dealt. Press Flip."
+	status_label.text = "Cards dealt.\nPress Flip."
 	_update_count_label()
 
 
 func _ensure_nodes() -> void:
-	if cards_root == null:
-		cards_root = Node3D.new()
-		cards_root.name = "CardsRoot"
-		add_child(cards_root)
-
 	if canvas_layer == null:
 		canvas_layer = CanvasLayer.new()
 		canvas_layer.name = "CanvasLayer"
@@ -93,7 +104,7 @@ func _ensure_nodes() -> void:
 
 
 func _build_ui() -> void:
-	var panel := PanelContainer.new()
+	var panel: PanelContainer = PanelContainer.new()
 	panel.name = "WarPanel"
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	panel.offset_left = 20.0
@@ -102,18 +113,18 @@ func _build_ui() -> void:
 	panel.offset_bottom = 185.0
 	canvas_layer.add_child(panel)
 
-	var margin := MarginContainer.new()
+	var margin: MarginContainer = MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 12)
 	margin.add_theme_constant_override("margin_top", 10)
 	margin.add_theme_constant_override("margin_right", 12)
 	margin.add_theme_constant_override("margin_bottom", 10)
 	panel.add_child(margin)
 
-	var box := VBoxContainer.new()
+	var box: VBoxContainer = VBoxContainer.new()
 	box.add_theme_constant_override("separation", 6)
 	margin.add_child(box)
 
-	var title := Label.new()
+	var title: Label = Label.new()
 	title.text = "War"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
@@ -127,7 +138,7 @@ func _build_ui() -> void:
 	count_label.text = ""
 	box.add_child(count_label)
 
-	var buttons := HBoxContainer.new()
+	var buttons: HBoxContainer = HBoxContainer.new()
 	buttons.add_theme_constant_override("separation", 8)
 	box.add_child(buttons)
 
@@ -147,9 +158,9 @@ func _deal_cards() -> void:
 	fox_deck.clear()
 	round_number = 0
 
-	var deck := _build_standard_deck()
+	var deck: Array[Dictionary] = _build_standard_deck()
 
-	for i in range(deck.size()):
+	for i: int in range(deck.size()):
 		var card: Dictionary = deck[i]
 
 		if i % 2 == 0:
@@ -161,13 +172,18 @@ func _deal_cards() -> void:
 func _build_standard_deck() -> Array[Dictionary]:
 	var deck: Array[Dictionary] = []
 
-	for suit in SUITS:
-		for i in range(RANK_LABELS.size()):
+	for suit_index: int in range(SUITS.size()):
+		var suit: String = SUITS[suit_index]
+
+		for rank_index: int in range(RANK_LABELS.size()):
+			var rank: String = RANK_LABELS[rank_index]
+			var value: int = RANK_VALUES[rank_index]
+
 			deck.append({
-				"rank": RANK_LABELS[i],
-				"value": RANK_VALUES[i],
+				"rank": rank,
+				"value": value,
 				"suit": suit,
-				"text": "%s%s" % [RANK_LABELS[i], suit]
+				"text": "%s%s" % [rank, suit]
 			})
 
 	deck.shuffle()
@@ -175,20 +191,62 @@ func _build_standard_deck() -> Array[Dictionary]:
 
 
 func _animate_initial_deal() -> void:
+	if table_cards == null:
+		return
+
+	table_cards.clear_group(&"war_deal_animation")
+
 	var count: int = clampi(visual_deal_cards, 0, 52)
-	for i in range(count):
-		var target := player_deck_position if i % 2 == 0 else fox_deck_position
-		target += Vector3(randf_range(-0.035, 0.035), 0.0, randf_range(-0.035, 0.035))
 
-		var card_node := _make_card_visual("?", center_deck_position, true)
+	for i: int in range(count):
+		var target: Vector3 = player_deck_position if i % 2 == 0 else fox_deck_position
+		target += Vector3(
+			randf_range(-0.035, 0.035),
+			0.0,
+			randf_range(-0.035, 0.035)
+		)
 
-		var tween := create_tween()
+		var card_node: Node3D = table_cards.show_card(
+			{},
+			&"war_deal_animation",
+			center_deck_position,
+			true
+		)
+
+		var tween: Tween = create_tween()
 		tween.tween_property(card_node, "position", target, deal_move_time)
 		tween.tween_callback(card_node.queue_free)
 
 		await get_tree().create_timer(deal_spacing).timeout
 
 	await get_tree().create_timer(deal_move_time).timeout
+	table_cards.clear_group(&"war_deal_animation")
+
+
+func _redraw_table() -> void:
+	if table_cards == null:
+		return
+
+	table_cards.clear_group(&"war_player_deck")
+	table_cards.clear_group(&"war_fox_deck")
+	table_cards.clear_group(&"war_face_up")
+	table_cards.clear_group(&"war_pot")
+
+	table_cards.show_stack(
+		player_deck.size(),
+		&"war_player_deck",
+		player_deck_position,
+		true,
+		"You %d" % player_deck.size()
+	)
+
+	table_cards.show_stack(
+		fox_deck.size(),
+		&"war_fox_deck",
+		fox_deck_position,
+		true,
+		"Fox %d" % fox_deck.size()
+	)
 
 
 func _on_flip_pressed() -> void:
@@ -204,7 +262,6 @@ func _on_flip_pressed() -> void:
 func _play_battle() -> void:
 	busy = true
 	_set_buttons_enabled(false)
-
 	round_number += 1
 
 	var pot: Array[Dictionary] = []
@@ -220,11 +277,14 @@ func _play_battle() -> void:
 		pot.append(player_card)
 		pot.append(fox_card)
 
-		await _show_face_up_cards(player_card, fox_card)
+		await _show_face_up_cards(player_card, fox_card, pot.size())
 
-		if int(player_card["value"]) > int(fox_card["value"]):
+		var player_value: int = int(player_card["value"])
+		var fox_value: int = int(fox_card["value"])
+
+		if player_value > fox_value:
 			final_winner = &"player"
-		elif int(fox_card["value"]) > int(player_card["value"]):
+		elif fox_value > player_value:
 			final_winner = &"fox"
 		else:
 			status_label.text = "War! Both flipped %s." % String(player_card["rank"])
@@ -232,6 +292,7 @@ func _play_battle() -> void:
 
 			_burn_war_cards(player_deck, pot)
 			_burn_war_cards(fox_deck, pot)
+			_show_war_pot_stack(pot.size())
 
 			if player_deck.is_empty() or fox_deck.is_empty():
 				break
@@ -249,6 +310,8 @@ func _play_battle() -> void:
 
 	await get_tree().create_timer(result_pause_time).timeout
 
+	_redraw_table()
+
 	if _check_for_game_end():
 		return
 
@@ -260,70 +323,66 @@ func _burn_war_cards(deck: Array[Dictionary], pot: Array[Dictionary]) -> void:
 	var available_burn_cards: int = maxi(deck.size() - 1, 0)
 	var burn_count: int = mini(3, available_burn_cards)
 
-	for i in range(burn_count):
+	for i: int in range(burn_count):
 		pot.append(deck.pop_back())
 
 
 func _collect_pot(deck: Array[Dictionary], pot: Array[Dictionary]) -> void:
 	pot.shuffle()
 
-	for card in pot:
+	for card: Dictionary in pot:
 		deck.insert(0, card)
 
 	pot.clear()
 
 
-func _show_face_up_cards(player_card: Dictionary, fox_card: Dictionary) -> void:
-	_clear_face_up_cards()
+func _show_face_up_cards(player_card: Dictionary, fox_card: Dictionary, pot_count: int) -> void:
+	if table_cards == null:
+		return
 
-	var player_card_node := _make_card_visual(String(player_card["text"]), player_deck_position, false)
-	var fox_card_node := _make_card_visual(String(fox_card["text"]), fox_deck_position, false)
+	table_cards.clear_group(&"war_face_up")
+	table_cards.clear_group(&"war_pot")
 
-	face_up_nodes.append(player_card_node)
-	face_up_nodes.append(fox_card_node)
+	var player_card_node: Node3D = table_cards.show_card(
+		player_card,
+		&"war_face_up",
+		player_deck_position,
+		false
+	)
 
-	var tween := create_tween()
+	var fox_card_node: Node3D = table_cards.show_card(
+		fox_card,
+		&"war_face_up",
+		fox_deck_position,
+		false
+	)
+
+	var tween: Tween = create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(player_card_node, "position", player_face_up_position, flip_move_time)
 	tween.tween_property(fox_card_node, "position", fox_face_up_position, flip_move_time)
 
+	_show_war_pot_stack(pot_count)
+
 	await tween.finished
 
 
-func _make_card_visual(text: String, start_position: Vector3, face_down: bool) -> Node3D:
-	var root := Node3D.new()
-	root.name = "CardVisual"
-	root.position = start_position
-	cards_root.add_child(root)
+func _show_war_pot_stack(pot_count: int) -> void:
+	if table_cards == null:
+		return
 
-	var body := CSGBox3D.new()
-	body.name = "CardBody"
-	body.size = Vector3(0.24, 0.018, 0.34)
+	table_cards.clear_group(&"war_pot")
 
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.22, 0.28, 0.42, 1.0) if face_down else Color(0.88, 0.84, 0.68, 1.0)
-	body.material = material
+	if pot_count <= 2:
+		return
 
-	root.add_child(body)
-
-	var label := Label3D.new()
-	label.name = "CardLabel"
-	label.text = "★" if face_down else text
-	label.billboard = 1
-	label.font_size = 48
-	label.pixel_size = 0.006
-	label.position = Vector3(0.0, 0.035, 0.0)
-	root.add_child(label)
-
-	return root
-
-
-func _clear_face_up_cards() -> void:
-	for node in face_up_nodes:
-		if node != null and is_instance_valid(node):
-			node.queue_free()
-
-	face_up_nodes.clear()
+	table_cards.show_stack(
+		pot_count,
+		&"war_pot",
+		war_pot_position,
+		true,
+		"Pile %d" % pot_count
+	)
 
 
 func _check_for_game_end() -> bool:
@@ -347,7 +406,7 @@ func _finish_game(winner_id: StringName) -> void:
 	ready_to_play = false
 	_set_buttons_enabled(false)
 
-	var result := {
+	var result: Dictionary = {
 		"game_id": &"war",
 		"winner_id": winner_id,
 		"rounds": round_number,
@@ -379,4 +438,7 @@ func _set_buttons_enabled(value: bool) -> void:
 
 
 func _update_count_label() -> void:
-	count_label.text = "Your cards: %d    Fox cards: %d" % [player_deck.size(), fox_deck.size()]
+	count_label.text = "Your cards: %d Fox cards: %d" % [
+		player_deck.size(),
+		fox_deck.size()
+	]

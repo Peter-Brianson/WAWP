@@ -5,6 +5,4 @@
 [node name="WarGame" type="Node3D"]
 script = ExtResource("1_c2aqm")
 
-[node name="CardsRoot" type="Node3D" parent="."]
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
