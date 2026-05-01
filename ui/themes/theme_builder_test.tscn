@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgkpsoqgyaj5r"]
+
+[ext_resource type="Script" path="res://ui/themes/wawp_theme_builder.gd" id="1_8qbcf"]
+
+[node name="ThemeBuilderTest" type="Node"]
+script = ExtResource("1_8qbcf")
