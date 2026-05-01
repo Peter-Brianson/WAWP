@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://clg6oob4aussi"]
+[gd_scene load_steps=21 format=3 uid="uid://clg6oob4aussi"]
 
 [ext_resource type="Script" path="res://scenes/main/game.gd" id="1_bag06"]
 [ext_resource type="PackedScene" uid="uid://cetbirvf5of8g" path="res://characters/FoxCharacter.tscn" id="1_to8ot"]
 [ext_resource type="Script" path="res://gameplay/card_games/table_card_renderer.gd" id="2_bsb4n"]
 [ext_resource type="PackedScene" uid="uid://tul21na1qoj8" path="res://interactables/book_interactable.tscn" id="3_g805w"]
+[ext_resource type="Resource" uid="uid://ddkbpwfe7cswc" path="res://gameplay/cards/default_card_atlas.tres" id="3_hkj1j"]
 [ext_resource type="PackedScene" uid="uid://cquvec1fhepb4" path="res://ui/book/book_ui.tscn" id="4_nrame"]
 [ext_resource type="Script" path="res://gameplay/card_games/table_game_transition.gd" id="5_f6ygj"]
 [ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="5_tfp5t"]
@@ -71,6 +72,7 @@ material = SubResource("StandardMaterial3D_57it4")
 
 [node name="TableCardRenderer" type="Node3D" parent="World/StumpTableArea"]
 script = ExtResource("2_bsb4n")
+card_atlas = ExtResource("3_hkj1j")
 
 [node name="SeatAnchors" type="Node3D" parent="World/StumpTableArea"]
 
@@ -107,6 +109,7 @@ transform = Transform3D(0.167928, 0, -0.108629, 0, 0.2, 0, 0.108629, 0, 0.167928
 game_entries = Array[ExtResource("5_tfp5t")]([ExtResource("6_l10oj"), ExtResource("7_jq6wb"), ExtResource("9_s8aqf")])
 
 [node name="PlayerHandUI" parent="CanvasLayer" instance=ExtResource("8_f4ykx")]
+card_atlas = ExtResource("3_hkj1j")
 
 [node name="WinPopupUI" type="Control" parent="CanvasLayer"]
 layout_mode = 3

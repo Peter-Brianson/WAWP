@@ -1,6 +1,11 @@
 extends Node3D
 class_name TableCardRenderer
 
+@export_group("Atlas Art")
+@export var card_atlas: CardTextureAtlas
+@export var use_atlas_cards: bool = true
+@export var card_sprite_pixel_size: float = 0.002
+
 @export_group("Card Size")
 @export var card_size: Vector3 = Vector3(0.24, 0.018, 0.34)
 @export_range(0.001, 0.05, 0.001) var label_pixel_size: float = 0.006
@@ -37,6 +42,24 @@ func show_card(
 	root.set_meta("table_card_group", group_id)
 	add_child(root)
 
+	if use_atlas_cards and card_atlas != null:
+		var texture: Texture2D = null
+
+		if face_down:
+			texture = card_atlas.get_back_texture()
+		else:
+			texture = card_atlas.get_card_texture(card)
+
+		if texture != null:
+			var sprite: Sprite3D = Sprite3D.new()
+			sprite.name = "CardSprite"
+			sprite.texture = texture
+			sprite.pixel_size = _get_table_card_pixel_size()
+			sprite.rotation_degrees.x = -90.0
+			sprite.position = Vector3.ZERO
+			root.add_child(sprite)
+			return root
+
 	var body: CSGBox3D = CSGBox3D.new()
 	body.name = "CardBody"
 	body.size = card_size
@@ -54,6 +77,16 @@ func show_card(
 
 	return root
 
+func _get_table_card_pixel_size() -> float:
+	if card_atlas == null:
+		return card_sprite_pixel_size
+
+	var pixel_size: Vector2i = card_atlas.get_card_pixel_size()
+
+	if pixel_size.x <= 0:
+		return card_sprite_pixel_size
+
+	return card_size.x / float(pixel_size.x)
 
 func show_stack(
 	count: int,

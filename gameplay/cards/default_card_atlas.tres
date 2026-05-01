@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="CardTextureAtlas" load_steps=3 format=3 uid="uid://ddkbpwfe7cswc"]
+
+[ext_resource type="Texture2D" uid="uid://baeim3857ynox" path="res://art/sprites/cards/kerenel_Cards.png" id="1_6lc13"]
+[ext_resource type="Script" path="res://gameplay/cards/card_texture_atlas.gd" id="1_6rjvq"]
+
+[resource]
+script = ExtResource("1_6rjvq")
+atlas_texture = ExtResource("1_6lc13")
+columns = 14
+rows = 6
+card_width = 0
+card_height = 0
+first_card_index = 1
+first_back_index = 28
+default_back_variant = 0
+use_row_column_card_layout = true
+first_card_row = 0
+first_card_column = 1
+suit_row_stride = 1
+rank_order = Array[String](["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"])
+suit_order = Array[String](["♥", "♠", "♦", "♣"])

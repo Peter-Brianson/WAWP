@@ -4,6 +4,11 @@ class_name PlayerHandUI
 signal card_selected(card: Dictionary, hand_index: int)
 signal close_requested
 
+@export_group("Card Art")
+@export var card_atlas: CardTextureAtlas
+@export var use_card_atlas_art: bool = true
+@export var show_text_when_atlas_missing: bool = true
+
 @export_group("Text")
 @export var title_text: String = "Your Hand"
 @export var default_instruction: String = "Choose a card."
@@ -232,7 +237,7 @@ func _rebuild_card_buttons() -> void:
 		var button := Button.new()
 
 		button.name = "Card_%02d" % i
-		button.text = _get_card_label(card)
+		_apply_card_button_art(button, card)
 		button.tooltip_text = _get_card_tooltip(card)
 		button.custom_minimum_size = card_button_size
 		button.size = card_button_size
@@ -254,6 +259,23 @@ func _rebuild_card_buttons() -> void:
 
 	_layout_cards()
 
+func _apply_card_button_art(button: Button, card: Dictionary) -> void:
+	if use_card_atlas_art and card_atlas != null:
+		var texture: Texture2D = card_atlas.get_card_texture(card)
+
+		if texture != null:
+			button.icon = texture
+			button.expand_icon = true
+			button.text = ""
+			button.tooltip_text = _get_card_tooltip(card)
+			return
+
+	button.icon = null
+
+	if show_text_when_atlas_missing:
+		button.text = _get_card_label(card)
+	else:
+		button.text = ""
 
 func _clear_card_buttons() -> void:
 	_card_buttons.clear()

@@ -304,9 +304,9 @@ func _redraw_table(reveal_fox: bool) -> void:
 		var fox_pos: Vector3 = fox_seat_position + Vector3(-0.16 + 0.32 * float(i), 0.04, 0.0)
 		table_cards.show_card(fox_hole_cards[i], &"fox_hole", fox_pos, not reveal_fox)
 
-	for i: int in range(player_hole_cards.size()):
-		var player_pos: Vector3 = player_seat_position + Vector3(-0.16 + 0.32 * float(i), 0.04, 0.0)
-		table_cards.show_card(player_hole_cards[i], &"player_hole", player_pos, false)
+	#for i: int in range(player_hole_cards.size()):
+		#var player_pos: Vector3 = player_seat_position + Vector3(-0.16 + 0.32 * float(i), 0.04, 0.0)
+		#table_cards.show_card(player_hole_cards[i], &"player_hole", player_pos, false)
 
 
 func _update_ui() -> void:
