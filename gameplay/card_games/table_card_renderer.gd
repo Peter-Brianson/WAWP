@@ -1,20 +1,25 @@
 extends Node3D
 class_name TableCardRenderer
 
+@export_group("Card Size")
+@export var card_size: Vector3 = Vector3(0.145, 0.01, 0.205)
+@export_range(0.001, 0.05, 0.001) var label_pixel_size: float = 0.0032
+@export var label_font_size: int = 32
+
 @export_group("Atlas Art")
 @export var card_atlas: CardTextureAtlas
 @export var use_atlas_cards: bool = true
-@export var card_sprite_pixel_size: float = 0.002
-
-@export_group("Card Size")
-@export var card_size: Vector3 = Vector3(0.24, 0.018, 0.34)
-@export_range(0.001, 0.05, 0.001) var label_pixel_size: float = 0.006
-@export var label_font_size: int = 48
+@export var card_sprite_pixel_size: float = 0.0022
 
 @export_group("Stack Display")
-@export_range(1, 24, 1) var visible_stack_cards: int = 8
-@export_range(0.001, 0.04, 0.001) var stack_y_offset: float = 0.008
-@export_range(0.0, 0.08, 0.001) var stack_spread: float = 0.012
+@export_range(1, 24, 1) var visible_stack_cards: int = 4
+@export_range(0.001, 0.04, 0.001) var stack_y_offset: float = 0.003
+@export_range(0.0, 0.08, 0.001) var stack_spread: float = 0.004
+@export var stack_label_offset: Vector3 = Vector3(0.0, 0.105, 0.0)
+
+@export_group("Labels")
+@export var show_stack_labels: bool = true
+@export var label_billboard_mode: int = 1
 
 
 func clear_all_cards() -> void:
@@ -56,7 +61,7 @@ func show_card(
 			sprite.texture = texture
 			sprite.pixel_size = _get_table_card_pixel_size()
 			sprite.rotation_degrees.x = -90.0
-			sprite.position = Vector3.ZERO
+			sprite.shaded = true
 			root.add_child(sprite)
 			return root
 
@@ -69,7 +74,7 @@ func show_card(
 	var label: Label3D = Label3D.new()
 	label.name = "CardLabel"
 	label.text = "★" if face_down else _get_card_text(card)
-	label.billboard = 1
+	label.billboard = label_billboard_mode
 	label.font_size = label_font_size
 	label.pixel_size = label_pixel_size
 	label.position = Vector3(0.0, card_size.y * 2.0, 0.0)
@@ -77,16 +82,6 @@ func show_card(
 
 	return root
 
-func _get_table_card_pixel_size() -> float:
-	if card_atlas == null:
-		return card_sprite_pixel_size
-
-	var pixel_size: Vector2i = card_atlas.get_card_pixel_size()
-
-	if pixel_size.x <= 0:
-		return card_sprite_pixel_size
-
-	return card_size.x / float(pixel_size.x)
 
 func show_stack(
 	count: int,
@@ -103,6 +98,9 @@ func show_stack(
 
 	var shown_count: int = clampi(count, 0, visible_stack_cards)
 
+	if count > 0 and shown_count <= 0:
+		shown_count = 1
+
 	for i: int in range(shown_count):
 		var card_root: Node3D = Node3D.new()
 		card_root.name = "StackCard_%02d" % i
@@ -113,23 +111,48 @@ func show_stack(
 		)
 		root.add_child(card_root)
 
+		if use_atlas_cards and card_atlas != null:
+			var texture: Texture2D = card_atlas.get_back_texture()
+
+			if texture != null:
+				var sprite: Sprite3D = Sprite3D.new()
+				sprite.name = "StackCardSprite"
+				sprite.texture = texture
+				sprite.pixel_size = _get_table_card_pixel_size()
+				sprite.rotation_degrees.x = -90.0
+				sprite.shaded = true
+				card_root.add_child(sprite)
+				continue
+
 		var body: CSGBox3D = CSGBox3D.new()
 		body.name = "CardBody"
 		body.size = card_size
 		body.material = _make_card_material(face_down)
 		card_root.add_child(body)
 
-	if label_text != "":
+	if show_stack_labels and label_text != "":
 		var label: Label3D = Label3D.new()
 		label.name = "StackLabel"
 		label.text = label_text
-		label.billboard = 1
-		label.font_size = 36
+		label.billboard = label_billboard_mode
+		label.font_size = label_font_size
 		label.pixel_size = label_pixel_size
-		label.position = Vector3(0.0, card_size.y * 4.0 + 0.06, 0.0)
+		label.position = stack_label_offset
 		root.add_child(label)
 
 	return root
+
+
+func _get_table_card_pixel_size() -> float:
+	if card_atlas == null:
+		return card_sprite_pixel_size
+
+	var pixel_size: Vector2i = card_atlas.get_card_pixel_size()
+
+	if pixel_size.x <= 0:
+		return card_sprite_pixel_size
+
+	return card_size.x / float(pixel_size.x)
 
 
 func _make_card_material(face_down: bool) -> StandardMaterial3D:

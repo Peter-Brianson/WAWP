@@ -33,11 +33,15 @@ signal game_finished(game_id: StringName, result: Dictionary)
 
 @export_group("Post Game")
 @export_range(0.0, 5.0, 0.1) var post_game_hold_time: float = 1.2
+@export var reset_camera_after_game: bool = true
+@export_range(0.05, 5.0, 0.05) var camera_return_time: float = 0.65
 
 var active_game: Node = null
 var active_game_id: StringName = &""
 var transition_running: bool = false
-
+var _saved_camera_position: Vector3 = Vector3.ZERO
+var _saved_camera_rotation_degrees: Vector3 = Vector3.ZERO
+var _has_saved_camera_transform: bool = false
 
 func start_card_game(entry: BookGameEntry) -> void:
 	if entry == null:
@@ -53,11 +57,41 @@ func start_card_game(entry: BookGameEntry) -> void:
 	active_game_id = entry.game_id
 	transition_started.emit(active_game_id)
 	clear_active_game()
+	_cache_camera_home_transform()
 	await _move_camera_to_table()
 	await _gather_players_to_table()
 	_load_game(entry)
 	transition_running = false
 
+func _cache_camera_home_transform() -> void:
+	var camera_rig := get_node_or_null(camera_rig_path) as Node3D
+
+	if camera_rig == null:
+		return
+
+	_saved_camera_position = camera_rig.position
+	_saved_camera_rotation_degrees = camera_rig.rotation_degrees
+	_has_saved_camera_transform = true
+
+
+func _return_camera_home() -> void:
+	if not reset_camera_after_game:
+		return
+
+	if not _has_saved_camera_transform:
+		return
+
+	var camera_rig := get_node_or_null(camera_rig_path) as Node3D
+
+	if camera_rig == null:
+		return
+
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(camera_rig, "position", _saved_camera_position, camera_return_time)
+	tween.tween_property(camera_rig, "rotation_degrees", _saved_camera_rotation_degrees, camera_return_time)
+
+	await tween.finished
 
 func clear_active_game() -> void:
 	if active_game != null and is_instance_valid(active_game):
@@ -151,6 +185,9 @@ func _on_active_game_finished(result: Dictionary = {}) -> void:
 	await _show_win_popup(result)
 
 	clear_active_game()
+
+	await _return_camera_home()
+
 	game_finished.emit(active_game_id, result)
 
 func _show_win_popup(result: Dictionary) -> void:

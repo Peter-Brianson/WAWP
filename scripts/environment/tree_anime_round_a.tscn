@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5vi40rgih6fx"]
+
+[ext_resource type="Script" path="res://scripts/environment/stylized_tree_generator.gd" id="1_ckh83"]
+
+[node name="TreeAnimeRoundA" type="Node3D"]
+script = ExtResource("1_ckh83")
