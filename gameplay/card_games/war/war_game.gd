@@ -40,6 +40,7 @@ var ready_to_play: bool = false
 var busy: bool = false
 var round_number: int = 0
 
+var table_layout_area: TableLayoutArea = null
 
 func _ready() -> void:
 	_ensure_nodes()
@@ -50,6 +51,9 @@ func _ready() -> void:
 func configure_card_game(context: Dictionary) -> void:
 	if context.has("table_card_renderer"):
 		table_cards = context["table_card_renderer"] as TableCardRenderer
+	if context.has("table_layout_area"):
+		table_layout_area = context["table_layout_area"] as TableLayoutArea
+
 
 	if table_cards == null:
 		push_warning("WarGame could not find shared TableCardRenderer. Creating fallback renderer.")
@@ -61,14 +65,25 @@ func configure_card_game(context: Dictionary) -> void:
 		center_deck_position = table_cards.to_local(context["center_deck_global"])
 
 	if context.has("player_seat_global"):
-		player_deck_position = table_cards.to_local(context["player_seat_global"]) + Vector3(0.0, 0.04, 0.0)
+		player_deck_position = table_cards.to_local(context["player_seat_global"]) + Vector3(0.0, 0.04, -0.12)
 
 	if context.has("fox_seat_global"):
-		fox_deck_position = table_cards.to_local(context["fox_seat_global"]) + Vector3(0.0, 0.04, 0.0)
+		fox_deck_position = table_cards.to_local(context["fox_seat_global"]) + Vector3(0.0, 0.04, 0.12)
 
 	player_face_up_position = center_deck_position + Vector3(-0.26, 0.06, 0.14)
 	fox_face_up_position = center_deck_position + Vector3(0.26, 0.06, -0.14)
 	war_pot_position = center_deck_position + Vector3(0.0, 0.05, 0.0)
+	
+	if table_layout_area != null and table_cards != null:
+		center_deck_position = table_cards.to_local(table_layout_area.get_center_global())
+
+		player_deck_position = table_cards.to_local(table_layout_area.get_player_stack_global(0, 2))
+		fox_deck_position = table_cards.to_local(table_layout_area.get_player_stack_global(1, 2))
+
+		player_face_up_position = table_cards.to_local(table_layout_area.get_player_face_up_global(0, 2))
+		fox_face_up_position = table_cards.to_local(table_layout_area.get_player_face_up_global(1, 2))
+
+		war_pot_position = table_cards.to_local(table_layout_area.get_pot_global())
 
 
 func start_game() -> void:

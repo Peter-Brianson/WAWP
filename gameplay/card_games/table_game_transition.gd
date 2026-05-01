@@ -13,6 +13,7 @@ signal game_finished(game_id: StringName, result: Dictionary)
 @export var player_hand_ui_path: NodePath = ^"../../CanvasLayer/PlayerHandUI"
 @export var table_card_renderer_path: NodePath = ^"../../World/StumpTableArea/TableCardRenderer"
 @export var win_popup_ui_path: NodePath = ^"../../CanvasLayer/WinPopupUI"
+@export var table_layout_area_path: NodePath = ^"../../World/StumpTableArea/TableLayoutArea"
 
 @export_group("Seat Markers")
 @export var center_deck_marker_path: NodePath = ^"../../World/StumpTableArea/SeatAnchors/CenterDeck"
@@ -165,7 +166,8 @@ func _build_game_context() -> Dictionary:
 		"fox_seat_global": _get_marker_global_position(fox_seat_marker_path, fallback_fox_seat_local),
 		"player_ids": [&"player", &"fox"],
 		"player_hand_ui": get_node_or_null(player_hand_ui_path),
-		"table_card_renderer": get_node_or_null(table_card_renderer_path)
+		"table_card_renderer": get_node_or_null(table_card_renderer_path),
+		"table_layout_area": get_node_or_null(table_layout_area_path)
 	}
 
 

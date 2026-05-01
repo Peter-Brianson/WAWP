@@ -112,47 +112,33 @@ func _create_leaf_canopy(rng: RandomNumberGenerator) -> void:
 
 	var multimesh := MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.use_custom_data = true
+	multimesh.use_custom_data = false
 	multimesh.mesh = quad
 	multimesh.instance_count = leaf_card_count
 
-	var canopy_center := Vector3(0.0, trunk_height + canopy_y_offset, 0.0)
+	var canopy_center: Vector3 = Vector3(0.0, trunk_height + canopy_y_offset, 0.0)
 
-	for i in leaf_card_count:
-		var local_pos := _get_canopy_local_position(rng)
-		var world_pos := canopy_center + local_pos
+	for i in range(leaf_card_count):
+		var local_pos: Vector3 = _get_canopy_local_position(rng)
+		var world_pos: Vector3 = canopy_center + local_pos
 
-		var yaw := rng.randf_range(0.0, TAU)
-		var pitch := deg_to_rad(rng.randf_range(-leaf_max_tilt_degrees, leaf_max_tilt_degrees))
-		var roll := deg_to_rad(rng.randf_range(-leaf_max_tilt_degrees, leaf_max_tilt_degrees))
+		var yaw: float = rng.randf_range(0.0, TAU)
+		var pitch: float = deg_to_rad(rng.randf_range(-leaf_max_tilt_degrees, leaf_max_tilt_degrees))
+		var roll: float = deg_to_rad(rng.randf_range(-leaf_max_tilt_degrees, leaf_max_tilt_degrees))
 
-		var basis := Basis()
+		var basis: Basis = Basis()
 		basis = basis.rotated(Vector3.UP, yaw)
 		basis = basis.rotated(Vector3.RIGHT, pitch)
 		basis = basis.rotated(Vector3.FORWARD, roll)
 
-		var size_random := 1.0 + rng.randf_range(-leaf_size_randomness, leaf_size_randomness)
-		var width := leaf_card_width * size_random
-		var height := leaf_card_height * size_random
+		var size_random: float = 1.0 + rng.randf_range(-leaf_size_randomness, leaf_size_randomness)
+		var width: float = leaf_card_width * size_random
+		var height: float = leaf_card_height * size_random
 
 		basis = basis.scaled(Vector3(width, height, 1.0))
 
-		var transform := Transform3D(basis, world_pos)
+		var transform: Transform3D = Transform3D(basis, world_pos)
 		multimesh.set_instance_transform(i, transform)
-
-		# INSTANCE_CUSTOM:
-		# x = color variation
-		# y = wind phase
-		# z = unused
-		# w = unused
-		var custom := Color(
-			rng.randf_range(-leaf_color_variation, leaf_color_variation),
-			rng.randf(),
-			0.0,
-			1.0
-		)
-
-		multimesh.set_instance_custom_data(i, custom)
 
 	canopy.multimesh = multimesh
 	canopy.material_override = _make_leaf_material()
@@ -292,14 +278,9 @@ uniform bool wind_enabled = true;
 uniform float wind_strength = 0.035;
 uniform float wind_speed = 1.2;
 
-varying float leaf_variation;
-
 void vertex() {
-	leaf_variation = INSTANCE_CUSTOM.x;
-
 	if (wind_enabled) {
-		float phase = INSTANCE_CUSTOM.y * 6.28318;
-		float sway = sin(TIME * wind_speed + phase + VERTEX.y * 2.0) * wind_strength;
+		float sway = sin(TIME * wind_speed + VERTEX.y * 2.0 + VERTEX.x * 3.0) * wind_strength;
 		VERTEX.x += sway * (0.25 + UV.y);
 	}
 }
@@ -307,7 +288,6 @@ void vertex() {
 void fragment() {
 	vec2 centered_uv = UV * 2.0 - 1.0;
 
-	// Turns the square card into a soft oval/leaf blob.
 	float oval = dot(centered_uv, centered_uv);
 	float mask = smoothstep(1.0, 0.72, oval);
 
@@ -315,12 +295,19 @@ void fragment() {
 		discard;
 	}
 
-	// Simple vertical anime-style color banding.
-	vec3 lower = mix(leaf_shadow_color.rgb, leaf_mid_color.rgb, smoothstep(0.0, 0.65, UV.y));
-	vec3 upper = mix(lower, leaf_top_color.rgb, smoothstep(0.55, 1.0, UV.y));
+	vec3 lower = mix(
+		leaf_shadow_color.rgb,
+		leaf_mid_color.rgb,
+		smoothstep(0.0, 0.65, UV.y)
+	);
 
-	vec3 final_color = upper + vec3(leaf_variation);
-	ALBEDO = clamp(final_color, vec3(0.0), vec3(1.0));
+	vec3 upper = mix(
+		lower,
+		leaf_top_color.rgb,
+		smoothstep(0.55, 1.0, UV.y)
+	);
+
+	ALBEDO = upper;
 	ALPHA = mask;
 }
 """

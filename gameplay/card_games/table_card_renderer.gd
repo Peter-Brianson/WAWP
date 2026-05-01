@@ -21,6 +21,31 @@ class_name TableCardRenderer
 @export var show_stack_labels: bool = true
 @export var label_billboard_mode: int = 1
 
+@export_group("Table Bounds")
+@export var table_layout_area_path: NodePath = ^"../TableLayoutArea"
+@export var constrain_to_table_bounds: bool = true
+@export_range(0.0, 0.25, 0.005) var card_bounds_margin: float = 0.045
+
+var table_layout_area: TableLayoutArea = null
+
+func _ready() -> void:
+	table_layout_area = get_node_or_null(table_layout_area_path) as TableLayoutArea
+
+func _get_safe_local_position(local_position: Vector3, margin: float = -1.0) -> Vector3:
+	if not constrain_to_table_bounds:
+		return local_position
+
+	if table_layout_area == null:
+		table_layout_area = get_node_or_null(table_layout_area_path) as TableLayoutArea
+
+	if table_layout_area == null:
+		return local_position
+
+	var use_margin: float = card_bounds_margin if margin < 0.0 else margin
+	var global_position: Vector3 = to_global(local_position)
+	var safe_global: Vector3 = table_layout_area.clamp_global_position(global_position, use_margin)
+
+	return to_local(safe_global)
 
 func clear_all_cards() -> void:
 	for child in get_children():
@@ -42,7 +67,7 @@ func show_card(
 ) -> Node3D:
 	var root: Node3D = Node3D.new()
 	root.name = "TableCard_%s" % String(group_id)
-	root.position = position
+	root.position = _get_safe_local_position(position)
 	root.rotation_degrees.y = rotation_y_degrees
 	root.set_meta("table_card_group", group_id)
 	add_child(root)
@@ -92,7 +117,7 @@ func show_stack(
 ) -> Node3D:
 	var root: Node3D = Node3D.new()
 	root.name = "TableStack_%s" % String(group_id)
-	root.position = position
+	root.position = _get_safe_local_position(position)
 	root.set_meta("table_card_group", group_id)
 	add_child(root)
 
