@@ -25,7 +25,7 @@ grow_vertical = 2
 color = Color(1, 1, 1, 0.196078)
 
 [node name="BookRoot" type="Control" parent="."]
-custom_minimum_size = Vector2(1000, 650)
+custom_minimum_size = Vector2(800, 400)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -36,6 +36,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="TextureRect" parent="BookRoot"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,21 +48,56 @@ texture = ExtResource("2_yqnr6")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="LeftPage" type="VBoxContainer" parent="BookRoot"]
-custom_minimum_size = Vector2(300, 400)
+[node name="ColorRect" type="ColorRect" parent="BookRoot"]
+custom_minimum_size = Vector2(800, 400)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -318.0
-offset_top = -256.0
-offset_right = -18.0
-offset_bottom = 344.0
+offset_left = -400.0
+offset_top = -200.0
+offset_right = 400.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1, 0.76)
+color = Color(0.423935, 0.392162, 0.349632, 1)
+
+[node name="ColorRect" type="ColorRect" parent="BookRoot/ColorRect"]
+custom_minimum_size = Vector2(750, 350)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.485727, 0.475469, 0.317168, 1)
+
+[node name="ColorRect" type="ColorRect" parent="BookRoot/ColorRect/ColorRect"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.999999, 0.994847, 0.69991, 1)
+
+[node name="LeftPage" type="VBoxContainer" parent="BookRoot"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 400.0
+grow_vertical = 2
 alignment = 1
 
 [node name="GameTitleLabel" type="Label" parent="BookRoot/LeftPage"]
@@ -70,6 +106,8 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 5
 text = "game title"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="GameDescriptionLabel" type="RichTextLabel" parent="BookRoot/LeftPage"]
 layout_mode = 2
@@ -83,27 +121,26 @@ text = "game rules"
 layout_mode = 2
 text = "players
 "
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="RightPage" type="VBoxContainer" parent="BookRoot"]
-custom_minimum_size = Vector2(600, 500)
+custom_minimum_size = Vector2(400, 400)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 61.0
-offset_top = -209.0
-offset_right = 661.0
-offset_bottom = 291.0
-grow_horizontal = 2
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -45.0
+grow_horizontal = 0
 grow_vertical = 2
-scale = Vector2(0.4, 0.8)
 alignment = 1
 
 [node name="StatusLabel" type="Label" parent="BookRoot/RightPage"]
 layout_mode = 2
 text = "status"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PreferenceLabel" type="RichTextLabel" parent="BookRoot/RightPage"]
 layout_mode = 2
@@ -112,36 +149,54 @@ text = "pref"
 [node name="PlayedStampLabel" type="Label" parent="BookRoot/RightPage"]
 layout_mode = 2
 text = "played"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PreviousButton" type="Button" parent="BookRoot"]
-layout_mode = 0
-offset_left = 112.0
-offset_top = 270.0
-offset_right = 187.0
-offset_bottom = 301.0
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.5
+offset_right = 75.0
+offset_bottom = 15.5
+grow_vertical = 2
 text = "Previous
 "
 
 [node name="NextButton" type="Button" parent="BookRoot"]
-layout_mode = 0
-offset_left = 833.0
-offset_top = 271.0
-offset_right = 878.0
-offset_bottom = 302.0
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
 text = "Next"
 
 [node name="PlayButton" type="Button" parent="BookRoot"]
-layout_mode = 0
-offset_left = 589.0
-offset_top = 454.0
-offset_right = 630.0
-offset_bottom = 485.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -41.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "Play"
 
 [node name="CloseButton" type="Button" parent="BookRoot"]
-layout_mode = 0
-offset_left = 130.0
-offset_top = 91.0
-offset_right = 180.0
-offset_bottom = 122.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 50.0
+grow_vertical = 0
 text = "Close"

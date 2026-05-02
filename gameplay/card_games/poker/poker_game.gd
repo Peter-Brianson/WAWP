@@ -447,6 +447,23 @@ func _update_ui() -> void:
 	var can_bet_from_chips: bool = can_continue and _can_player_raise_by(1)
 	_set_player_chip_hint(can_bet_from_chips)
 
+func _can_player_raise_by(raise_size: int) -> bool:
+	if player_chips <= _amount_player_must_call():
+		return false
+
+	if current_bet >= max_bet_per_round:
+		return false
+
+	var target_bet: int = 0
+
+	if current_bet <= 0:
+		target_bet = raise_size
+	else:
+		target_bet = current_bet + raise_size
+
+	target_bet = mini(target_bet, max_bet_per_round)
+
+	return target_bet > player_round_bet
 
 func _set_action_buttons_enabled(value: bool) -> void:
 	if not value:

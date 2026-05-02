@@ -4,21 +4,5 @@
 
 [node name="PokerGame" type="Node3D"]
 script = ExtResource("1_68axc")
-starting_chips = null
-small_blind = null
-big_blind = null
-max_bet_per_round = null
-center_deck_position = null
-player_seat_position = null
-fox_seat_position = null
-community_start_position = null
-community_card_spacing = null
-deck_stack_offset = null
-pot_stack_offset = null
-player_chips_offset = null
-fox_chips_offset = null
-fox_think_pause = null
-deal_pause = null
-showdown_pause = null
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
