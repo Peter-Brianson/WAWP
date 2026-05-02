@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3 uid="uid://d0qmxvyhu1wom"]
 
 [ext_resource type="PackedScene" path="res://gameplay/card_games/go_fish/go_fish_game.tscn" id="1_gofish"]
 [ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="2_entry"]
