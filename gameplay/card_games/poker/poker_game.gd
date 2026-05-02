@@ -140,6 +140,8 @@ func debug_end_test(winner_id: StringName = &"fox") -> void:
 func _build_ui() -> void:
 	action_canvas = CanvasLayer.new()
 	action_canvas.name = "PokerCanvasLayer"
+	# Keep poker action buttons above PlayerHandUI so the hand cannot block clicks.
+	action_canvas.layer = 30
 	add_child(action_canvas)
 
 	action_bar = Control.new()
@@ -150,6 +152,7 @@ func _build_ui() -> void:
 	action_bar.offset_right = 0.0
 	action_bar.offset_bottom = -18.0
 	action_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	action_bar.z_index = 300
 	action_canvas.add_child(action_bar)
 
 	var row: HBoxContainer = HBoxContainer.new()
@@ -157,12 +160,15 @@ func _build_ui() -> void:
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 12)
 	row.set_anchors_preset(Control.PRESET_FULL_RECT)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	action_bar.add_child(row)
 
 	check_call_button = Button.new()
 	check_call_button.text = "Check"
 	check_call_button.theme_type_variation = "GameButton"
 	check_call_button.custom_minimum_size = Vector2(140.0, 44.0)
+	check_call_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	check_call_button.z_index = 350
 	check_call_button.pressed.connect(_on_check_call_pressed)
 	row.add_child(check_call_button)
 
@@ -170,6 +176,8 @@ func _build_ui() -> void:
 	fold_button.text = "Fold"
 	fold_button.theme_type_variation = "GameButton"
 	fold_button.custom_minimum_size = Vector2(120.0, 44.0)
+	fold_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	fold_button.z_index = 350
 	fold_button.pressed.connect(_on_fold_pressed)
 	row.add_child(fold_button)
 
@@ -183,6 +191,7 @@ func _ensure_bet_popup() -> void:
 	if action_canvas == null:
 		action_canvas = CanvasLayer.new()
 		action_canvas.name = "PokerCanvasLayer"
+		action_canvas.layer = 30
 		add_child(action_canvas)
 
 	bet_popup = PanelContainer.new()
@@ -194,6 +203,8 @@ func _ensure_bet_popup() -> void:
 	bet_popup.offset_right = 170.0
 	bet_popup.offset_bottom = 92.0
 	bet_popup.visible = false
+	bet_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	bet_popup.z_index = 400
 	action_canvas.add_child(bet_popup)
 
 	var margin: MarginContainer = MarginContainer.new()

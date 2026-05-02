@@ -30,6 +30,12 @@ signal game_finished(game_id: StringName, result: Dictionary)
 @export var table_camera_rotation_degrees: Vector3 = Vector3(-72.0, 0.0, 0.0)
 @export_range(0.05, 5.0, 0.05) var camera_move_time: float = 0.75
 
+@export_group("Camera Focus")
+@export var focus_camera_on_player_head: bool = true
+@export var player_camera_focus_path: NodePath = ^"../../World/HumanBoy/DialogueAnchor"
+@export var camera_player_focus_offset: Vector3 = Vector3(0.0, 0.85, 1.35)
+@export var camera_player_focus_rotation_degrees: Vector3 = Vector3(-48.0, 0.0, 0.0)
+
 @export_group("Gathering")
 @export var gather_players: bool = true
 @export_range(0.05, 5.0, 0.05) var gather_time: float = 0.45
@@ -105,7 +111,7 @@ func _cache_camera_home_transform() -> void:
 	if camera_rig == null:
 		return
 
-	_saved_camera_position = camera_rig.position
+	_saved_camera_position = camera_rig.global_position
 	_saved_camera_rotation_degrees = camera_rig.rotation_degrees
 	_has_saved_camera_transform = true
 
@@ -123,7 +129,7 @@ func _return_camera_home() -> void:
 
 	var tween := create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(camera_rig, "position", _saved_camera_position, camera_return_time)
+	tween.tween_property(camera_rig, "global_position", _saved_camera_position, camera_return_time)
 	tween.tween_property(camera_rig, "rotation_degrees", _saved_camera_rotation_degrees, camera_return_time)
 
 	await tween.finished
@@ -147,10 +153,27 @@ func _move_camera_to_table() -> void:
 		push_warning("TableGameTransition could not find CameraRig.")
 		return
 
+	var target_position: Vector3 = camera_rig.global_position
+	var target_rotation: Vector3 = camera_rig.rotation_degrees
+
+	if focus_camera_on_player_head:
+		var focus_anchor := get_node_or_null(player_camera_focus_path) as Node3D
+
+		if focus_anchor != null:
+			target_position = focus_anchor.global_position + camera_player_focus_offset
+			target_rotation = camera_player_focus_rotation_degrees
+		else:
+			var center_marker_global: Vector3 = _get_marker_global_position(center_deck_marker_path, fallback_center_deck_local)
+			target_position = center_marker_global + camera_player_focus_offset
+			target_rotation = camera_player_focus_rotation_degrees
+	else:
+		target_position = table_camera_position
+		target_rotation = table_camera_rotation_degrees
+
 	var tween := create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(camera_rig, "position", table_camera_position, camera_move_time)
-	tween.tween_property(camera_rig, "rotation_degrees", table_camera_rotation_degrees, camera_move_time)
+	tween.tween_property(camera_rig, "global_position", target_position, camera_move_time)
+	tween.tween_property(camera_rig, "rotation_degrees", target_rotation, camera_move_time)
 
 	await tween.finished
 

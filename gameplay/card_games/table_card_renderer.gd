@@ -44,6 +44,14 @@ signal table_piece_clicked(group_id: StringName, piece: Node3D, event: InputEven
 @export var click_target_height: float = 0.10
 @export var click_target_scale: Vector2 = Vector2(1.25, 1.25)
 
+@export_group("Interaction Feedback")
+@export var enable_interaction_glow: bool = true
+@export var interaction_glow_size: Vector2 = Vector2(0.28, 0.38)
+@export var interaction_glow_color: Color = Color(1.0, 0.88, 0.28, 0.38)
+@export var interaction_glow_height: float = 0.006
+@export var spark_on_click: bool = true
+@export_range(0.05, 1.0, 0.01) var spark_lifetime: float = 0.32
+
 var table_layout_area: Node = null
 
 
@@ -204,6 +212,11 @@ func _add_click_target(root: Node3D, group_id: StringName, stack_count: int = 1)
 	shape.position = Vector3(0.0, click_target_height * 0.5, 0.0)
 	area.add_child(shape)
 
+	if enable_interaction_glow:
+		_add_interaction_glow(root)
+
+	area.mouse_entered.connect(_on_click_target_mouse_entered.bind(root))
+	area.mouse_exited.connect(_on_click_target_mouse_exited.bind(root))
 	area.input_event.connect(_on_click_target_input_event.bind(group_id, root))
 
 
@@ -219,12 +232,106 @@ func _on_click_target_input_event(
 	if event is InputEventMouseButton:
 		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+			if spark_on_click:
+				_spawn_click_spark(piece.global_position)
 			table_piece_clicked.emit(group_id, piece, event)
 
 	if event is InputEventScreenTouch:
 		var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
 		if touch_event.pressed:
+			if spark_on_click:
+				_spawn_click_spark(piece.global_position)
 			table_piece_clicked.emit(group_id, piece, event)
+
+
+func _add_interaction_glow(root: Node3D) -> void:
+	if root == null:
+		return
+
+	if root.get_node_or_null("InteractionGlow") != null:
+		return
+
+	var glow: MeshInstance3D = MeshInstance3D.new()
+	glow.name = "InteractionGlow"
+	glow.visible = false
+	glow.position = Vector3(0.0, interaction_glow_height, 0.0)
+	glow.rotation_degrees.x = -90.0
+
+	var plane: PlaneMesh = PlaneMesh.new()
+	plane.size = interaction_glow_size
+	glow.mesh = plane
+
+	var material: StandardMaterial3D = StandardMaterial3D.new()
+	material.albedo_color = interaction_glow_color
+	material.emission_enabled = true
+	material.emission = Color(interaction_glow_color.r, interaction_glow_color.g, interaction_glow_color.b)
+	material.emission_energy_multiplier = 0.45
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.no_depth_test = true
+
+	glow.material_override = material
+	root.add_child(glow)
+
+
+func _on_click_target_mouse_entered(root: Node3D) -> void:
+	if root == null:
+		return
+
+	var glow: MeshInstance3D = root.get_node_or_null("InteractionGlow") as MeshInstance3D
+	if glow != null:
+		glow.visible = true
+
+
+func _on_click_target_mouse_exited(root: Node3D) -> void:
+	if root == null:
+		return
+
+	var glow: MeshInstance3D = root.get_node_or_null("InteractionGlow") as MeshInstance3D
+	if glow != null:
+		glow.visible = false
+
+
+func _spawn_click_spark(global_position: Vector3) -> void:
+	var scene_root: Node = get_tree().current_scene
+	if scene_root == null:
+		scene_root = self
+
+	var spark_root: Node3D = Node3D.new()
+	spark_root.name = "ClickSpark"
+	scene_root.add_child(spark_root)
+	spark_root.global_position = global_position + Vector3(0.0, 0.08, 0.0)
+
+	for i: int in range(6):
+		var spark: MeshInstance3D = MeshInstance3D.new()
+		spark.name = "Spark_%02d" % i
+
+		var sphere: SphereMesh = SphereMesh.new()
+		sphere.radius = 0.012
+		sphere.height = 0.024
+		spark.mesh = sphere
+
+		var material: StandardMaterial3D = StandardMaterial3D.new()
+		material.albedo_color = Color(1.0, 0.86, 0.32, 1.0)
+		material.emission_enabled = true
+		material.emission = Color(1.0, 0.72, 0.20, 1.0)
+		material.emission_energy_multiplier = 0.8
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		spark.material_override = material
+
+		spark_root.add_child(spark)
+
+		var angle: float = TAU * (float(i) / 6.0)
+		var target: Vector3 = Vector3(cos(angle) * 0.08, 0.08, sin(angle) * 0.08)
+
+		var tween: Tween = create_tween()
+		tween.set_parallel(true)
+		tween.tween_property(spark, "position", target, spark_lifetime * 0.875)
+		tween.tween_property(spark, "scale", Vector3.ZERO, spark_lifetime * 0.875)
+
+	var cleanup_tween: Tween = create_tween()
+	cleanup_tween.tween_interval(spark_lifetime)
+	cleanup_tween.tween_callback(spark_root.queue_free)
 
 
 func _style_card_sprite(sprite: Sprite3D) -> void:

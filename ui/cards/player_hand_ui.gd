@@ -227,15 +227,30 @@ func _apply_theme_variations() -> void:
 
 
 func _apply_immersive_display() -> void:
+	# The hand UI should not block poker action buttons or table clicks.
+	# Only actual card buttons should consume input.
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	if panel != null:
+		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	if scroll_container != null:
+		scroll_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	if card_fan != null:
+		card_fan.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 	if hide_hand_panel_background and panel != null:
 		panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 
 	if hide_hand_text_labels:
 		if title_label != null:
 			title_label.visible = false
+			title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 		if instruction_label != null:
 			instruction_label.visible = false
+			instruction_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	if close_button != null:
 		close_button.visible = show_close_button
