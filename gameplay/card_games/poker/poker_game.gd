@@ -265,6 +265,7 @@ func _on_table_piece_clicked(group_id: StringName, piece: Node3D, event: InputEv
 
 
 func _show_bet_popup() -> void:
+	_set_player_chip_hint(false)
 	_ensure_bet_popup()
 
 	if bet_popup == null:
@@ -442,8 +443,15 @@ func _update_ui() -> void:
 	check_call_button.disabled = not can_act
 	fold_button.disabled = not can_act
 
+	var can_continue: bool = can_act and player_chips > 0
+	var can_bet_from_chips: bool = can_continue and _can_player_raise_by(1)
+	_set_player_chip_hint(can_bet_from_chips)
+
 
 func _set_action_buttons_enabled(value: bool) -> void:
+	if not value:
+		_set_player_chip_hint(false)
+
 	if check_call_button != null:
 		check_call_button.disabled = not value
 
@@ -1009,6 +1017,12 @@ func _compare_scores(left_score: Array, right_score: Array) -> int:
 		return -1
 
 	return 0
+
+
+
+func _set_player_chip_hint(enabled: bool) -> void:
+	if table_cards != null and table_cards.has_method("set_group_interaction_hint"):
+		table_cards.set_group_interaction_hint(&"player_chips", enabled)
 
 
 func _configure_dialogue_from_context(context: Dictionary) -> void:

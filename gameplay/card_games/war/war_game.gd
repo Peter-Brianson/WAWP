@@ -95,6 +95,7 @@ func start_game() -> void:
 
 	ready_to_play = true
 	busy = false
+	_set_war_deck_hint(true)
 
 	await _say(&"fox", "War. Simple rules. Bigger card wins. Click your deck when you're ready.", 2.0)
 
@@ -187,6 +188,7 @@ func _redraw_table() -> void:
 
 func _play_battle() -> void:
 	busy = true
+	_set_war_deck_hint(false)
 	round_number += 1
 
 	var pot: Array[Dictionary] = []
@@ -239,6 +241,7 @@ func _play_battle() -> void:
 		return
 
 	busy = false
+	_set_war_deck_hint(true)
 
 
 func _burn_war_cards(deck: Array[Dictionary], pot: Array[Dictionary]) -> void:
@@ -308,6 +311,7 @@ func _check_for_game_end() -> bool:
 func _finish_game(winner_id: StringName) -> void:
 	busy = true
 	ready_to_play = false
+	_set_war_deck_hint(false)
 
 	var result: Dictionary = {
 		"game_id": &"war",
@@ -320,6 +324,12 @@ func _finish_game(winner_id: StringName) -> void:
 	}
 
 	game_finished.emit(result)
+
+
+
+func _set_war_deck_hint(enabled: bool) -> void:
+	if table_cards != null and table_cards.has_method("set_group_interaction_hint"):
+		table_cards.set_group_interaction_hint(&"war_player_deck", enabled)
 
 
 func _configure_dialogue_from_context(context: Dictionary) -> void:

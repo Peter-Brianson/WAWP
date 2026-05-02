@@ -24,7 +24,12 @@ signal table_piece_clicked(group_id: StringName, piece: Node3D, event: InputEven
 @export var constrain_to_table_bounds: bool = true
 @export_range(0.0, 0.25, 0.005) var card_bounds_margin: float = 0.045
 
-@export_group("3D Text Style")
+@export_group("Screen Labels")
+@export var use_screen_space_labels: bool = true
+@export var auto_create_screen_label_overlay: bool = true
+@export var screen_label_overlay_path: NodePath = ^"../../../CanvasLayer/TableScreenLabelOverlay"
+
+@export_group("3D Text Fallback")
 @export var show_stack_labels: bool = true
 @export var table_text_color: Color = Color(1.0, 1.0, 0.88, 1.0)
 @export var table_text_outline_color: Color = Color(0.02, 0.02, 0.015, 1.0)
@@ -53,18 +58,28 @@ signal table_piece_clicked(group_id: StringName, piece: Node3D, event: InputEven
 @export_range(0.05, 1.0, 0.01) var spark_lifetime: float = 0.32
 
 var table_layout_area: Node = null
+var screen_label_overlay: TableScreenLabelOverlay = null
 
 
 func _ready() -> void:
 	table_layout_area = get_node_or_null(table_layout_area_path)
+	screen_label_overlay = _get_screen_label_overlay()
 
 
 func clear_all_cards() -> void:
+	var overlay: TableScreenLabelOverlay = _get_screen_label_overlay()
+	if overlay != null:
+		overlay.clear_all()
+
 	for child: Node in get_children():
 		child.queue_free()
 
 
 func clear_group(group_id: StringName) -> void:
+	var overlay: TableScreenLabelOverlay = _get_screen_label_overlay()
+	if overlay != null:
+		overlay.clear_group(group_id)
+
 	for child: Node in get_children():
 		if child.has_meta("table_card_group") and child.get_meta("table_card_group") == group_id:
 			child.queue_free()
@@ -170,17 +185,80 @@ func show_stack(
 		card_root.add_child(body)
 
 	if show_stack_labels and label_text != "":
-		var label: Label3D = Label3D.new()
-		label.name = "StackLabel"
-		label.text = label_text
-		label.font_size = label_font_size
-		label.pixel_size = label_pixel_size
-		label.position = stack_label_offset
-		_style_table_label(label)
-		root.add_child(label)
+		if use_screen_space_labels:
+			var overlay: TableScreenLabelOverlay = _get_screen_label_overlay()
+			if overlay != null:
+				var label_id: String = "%s_%s" % [String(group_id), str(root.get_instance_id())]
+				overlay.register_label(label_id, group_id, root, label_text)
+			else:
+				_add_stack_label_3d(root, label_text)
+		else:
+			_add_stack_label_3d(root, label_text)
 
 	_add_click_target(root, group_id, shown_count)
 	return root
+
+
+func set_group_interaction_hint(group_id: StringName, enabled: bool) -> void:
+	for child: Node in get_children():
+		if not child is Node3D:
+			continue
+
+		var root: Node3D = child as Node3D
+
+		if not root.has_meta("table_card_group"):
+			continue
+
+		if root.get_meta("table_card_group") != group_id:
+			continue
+
+		root.set_meta("interaction_hint_active", enabled)
+
+		var glow: MeshInstance3D = root.get_node_or_null("InteractionGlow") as MeshInstance3D
+		if glow != null:
+			glow.visible = enabled
+
+
+func clear_all_interaction_hints() -> void:
+	for child: Node in get_children():
+		if child is Node3D:
+			var root: Node3D = child as Node3D
+			root.set_meta("interaction_hint_active", false)
+			var glow: MeshInstance3D = root.get_node_or_null("InteractionGlow") as MeshInstance3D
+			if glow != null:
+				glow.visible = false
+
+
+func _add_stack_label_3d(root: Node3D, label_text: String) -> void:
+	var label: Label3D = Label3D.new()
+	label.name = "StackLabel"
+	label.text = label_text
+	label.font_size = label_font_size
+	label.pixel_size = label_pixel_size
+	label.position = stack_label_offset
+	_style_table_label(label)
+	root.add_child(label)
+
+
+func _get_screen_label_overlay() -> TableScreenLabelOverlay:
+	if screen_label_overlay != null and is_instance_valid(screen_label_overlay):
+		return screen_label_overlay
+
+	screen_label_overlay = get_node_or_null(screen_label_overlay_path) as TableScreenLabelOverlay
+
+	if screen_label_overlay == null and auto_create_screen_label_overlay:
+		var scene_root: Node = get_tree().current_scene
+		var layer: CanvasLayer = null
+
+		if scene_root != null:
+			layer = scene_root.get_node_or_null("CanvasLayer") as CanvasLayer
+
+		if layer != null:
+			screen_label_overlay = TableScreenLabelOverlay.new()
+			screen_label_overlay.name = "TableScreenLabelOverlay"
+			layer.add_child(screen_label_overlay)
+
+	return screen_label_overlay
 
 
 func _add_click_target(root: Node3D, group_id: StringName, stack_count: int = 1) -> void:
@@ -253,7 +331,7 @@ func _add_interaction_glow(root: Node3D) -> void:
 
 	var glow: MeshInstance3D = MeshInstance3D.new()
 	glow.name = "InteractionGlow"
-	glow.visible = false
+	glow.visible = bool(root.get_meta("interaction_hint_active", false))
 	glow.position = Vector3(0.0, interaction_glow_height, 0.0)
 	glow.rotation_degrees.x = -90.0
 
@@ -288,8 +366,11 @@ func _on_click_target_mouse_exited(root: Node3D) -> void:
 		return
 
 	var glow: MeshInstance3D = root.get_node_or_null("InteractionGlow") as MeshInstance3D
-	if glow != null:
-		glow.visible = false
+	if glow == null:
+		return
+
+	var forced_on: bool = bool(root.get_meta("interaction_hint_active", false))
+	glow.visible = forced_on
 
 
 func _spawn_click_spark(global_position: Vector3) -> void:

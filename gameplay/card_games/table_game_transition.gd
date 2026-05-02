@@ -33,8 +33,9 @@ signal game_finished(game_id: StringName, result: Dictionary)
 @export_group("Camera Focus")
 @export var focus_camera_on_player_head: bool = true
 @export var player_camera_focus_path: NodePath = ^"../../World/HumanBoy/DialogueAnchor"
-@export var camera_player_focus_offset: Vector3 = Vector3(0.0, 0.85, 1.35)
-@export var camera_player_focus_rotation_degrees: Vector3 = Vector3(-48.0, 0.0, 0.0)
+@export var camera_player_focus_offset: Vector3 = Vector3(0.0, 1.05, 1.95)
+@export var camera_player_look_target_offset: Vector3 = Vector3(0.0, 0.18, 0.0)
+@export var camera_player_focus_rotation_degrees: Vector3 = Vector3(-48.0, 0.0, 0.0) # legacy fallback
 
 @export_group("Gathering")
 @export var gather_players: bool = true
@@ -153,27 +154,32 @@ func _move_camera_to_table() -> void:
 		push_warning("TableGameTransition could not find CameraRig.")
 		return
 
-	var target_position: Vector3 = camera_rig.global_position
-	var target_rotation: Vector3 = camera_rig.rotation_degrees
+	var center_marker_global: Vector3 = _get_marker_global_position(center_deck_marker_path, fallback_center_deck_local)
+	var target_position: Vector3 = table_camera_position
+	var look_target: Vector3 = center_marker_global + camera_player_look_target_offset
 
 	if focus_camera_on_player_head:
 		var focus_anchor := get_node_or_null(player_camera_focus_path) as Node3D
 
 		if focus_anchor != null:
 			target_position = focus_anchor.global_position + camera_player_focus_offset
-			target_rotation = camera_player_focus_rotation_degrees
 		else:
-			var center_marker_global: Vector3 = _get_marker_global_position(center_deck_marker_path, fallback_center_deck_local)
 			target_position = center_marker_global + camera_player_focus_offset
-			target_rotation = camera_player_focus_rotation_degrees
 	else:
 		target_position = table_camera_position
-		target_rotation = table_camera_rotation_degrees
+
+	var look_transform: Transform3D = Transform3D(Basis(), target_position).looking_at(look_target, Vector3.UP)
+	var target_rotation_radians: Vector3 = look_transform.basis.get_euler()
+	var target_rotation_degrees: Vector3 = Vector3(
+		rad_to_deg(target_rotation_radians.x),
+		rad_to_deg(target_rotation_radians.y),
+		rad_to_deg(target_rotation_radians.z)
+	)
 
 	var tween := create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(camera_rig, "global_position", target_position, camera_move_time)
-	tween.tween_property(camera_rig, "rotation_degrees", target_rotation, camera_move_time)
+	tween.tween_property(camera_rig, "rotation_degrees", target_rotation_degrees, camera_move_time)
 
 	await tween.finished
 

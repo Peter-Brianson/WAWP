@@ -151,6 +151,7 @@ func _on_table_piece_clicked(group_id: StringName, piece: Node3D, event: InputEv
 		return
 
 	awaiting_player_draw = false
+	_set_go_fish_deck_hint(false)
 	await _resolve_player_draw(pending_player_draw_rank)
 
 
@@ -305,6 +306,7 @@ func _ask_for_rank(
 		await _say(&"fox", "Nope. Go fish.", 1.0)
 		awaiting_player_draw = true
 		pending_player_draw_rank = rank
+		_set_go_fish_deck_hint(true)
 		_refresh_player_hand(false)
 		return true
 
@@ -487,6 +489,7 @@ func _check_for_game_end() -> bool:
 
 func _finish_game() -> void:
 	busy = true
+	_set_go_fish_deck_hint(false)
 
 	if player_hand_ui != null:
 		player_hand_ui.hide_hand()
@@ -517,6 +520,12 @@ func _finish_game() -> void:
 	}
 
 	game_finished.emit(result)
+
+
+
+func _set_go_fish_deck_hint(enabled: bool) -> void:
+	if table_cards != null and table_cards.has_method("set_group_interaction_hint"):
+		table_cards.set_group_interaction_hint(&"go_fish_deck", enabled)
 
 
 func _configure_dialogue_from_context(context: Dictionary) -> void:

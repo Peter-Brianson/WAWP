@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3 uid="uid://cwe1ntxf5tdkj"]
+[gd_resource type="Resource" script_class="BookGameEntry" load_steps=3 format=3]
 
-[ext_resource type="PackedScene" uid="uid://elq082nh5f2m" path="res://gameplay/card_games/poker/poker_game.tscn" id="1_poker"]
+[ext_resource type="PackedScene" path="res://gameplay/card_games/poker/poker_game.tscn" id="1_poker"]
 [ext_resource type="Script" path="res://ui/book/book_game_entry.gd" id="2_entry"]
 
 [resource]
