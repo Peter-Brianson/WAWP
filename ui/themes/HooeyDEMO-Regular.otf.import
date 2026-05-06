@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://7tykvtihhg3x"
-path="res://.godot/imported/HooeyDEMO-Regular.otf-7993bff624f15f8919300814bccc52b1.fontdata"
+path="res://.godot/imported/HooeyDEMO-Regular.otf-fd3494f1b7ca8f3bb268f5035f81f85d.fontdata"
 
 [deps]
 
-source_file="res://WAWP/ui/themes/HooeyDEMO-Regular.otf"
-dest_files=["res://.godot/imported/HooeyDEMO-Regular.otf-7993bff624f15f8919300814bccc52b1.fontdata"]
+source_file="res://ui/themes/HooeyDEMO-Regular.otf"
+dest_files=["res://.godot/imported/HooeyDEMO-Regular.otf-fd3494f1b7ca8f3bb268f5035f81f85d.fontdata"]
 
 [params]
 

@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://k8mifgwba1vg"
-path="res://.godot/imported/Kitto-PersonalUse.otf-a617a48119e722db08010700e68575f4.fontdata"
+path="res://.godot/imported/Kitto-PersonalUse.otf-23b1ed01f7bff33c9b8e30509e04024b.fontdata"
 
 [deps]
 
-source_file="res://WAWP/ui/themes/Kitto-PersonalUse.otf"
-dest_files=["res://.godot/imported/Kitto-PersonalUse.otf-a617a48119e722db08010700e68575f4.fontdata"]
+source_file="res://ui/themes/Kitto-PersonalUse.otf"
+dest_files=["res://.godot/imported/Kitto-PersonalUse.otf-23b1ed01f7bff33c9b8e30509e04024b.fontdata"]
 
 [params]
 

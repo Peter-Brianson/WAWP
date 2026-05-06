@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://c17n0bw66h842"
-path="res://.godot/imported/LeslieCrayon-Regular.ttf-d42c26b6004a4ac20353b141eef7b53d.fontdata"
+path="res://.godot/imported/LeslieCrayon-Regular.ttf-42af70cc99f305835312545a11fe0e44.fontdata"
 
 [deps]
 
-source_file="res://WAWP/ui/themes/LeslieCrayon-Regular.ttf"
-dest_files=["res://.godot/imported/LeslieCrayon-Regular.ttf-d42c26b6004a4ac20353b141eef7b53d.fontdata"]
+source_file="res://ui/themes/LeslieCrayon-Regular.ttf"
+dest_files=["res://.godot/imported/LeslieCrayon-Regular.ttf-42af70cc99f305835312545a11fe0e44.fontdata"]
 
 [params]
 

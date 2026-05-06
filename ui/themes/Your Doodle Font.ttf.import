@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://dvd5gfuo0go5x"
-path="res://.godot/imported/Your Doodle Font.ttf-67e10963596ff343b3791c1d63f51be7.fontdata"
+path="res://.godot/imported/Your Doodle Font.ttf-d5af78565386fab6ca6cd11b5307ec07.fontdata"
 
 [deps]
 
-source_file="res://WAWP/ui/themes/Your Doodle Font.ttf"
-dest_files=["res://.godot/imported/Your Doodle Font.ttf-67e10963596ff343b3791c1d63f51be7.fontdata"]
+source_file="res://ui/themes/Your Doodle Font.ttf"
+dest_files=["res://.godot/imported/Your Doodle Font.ttf-d5af78565386fab6ca6cd11b5307ec07.fontdata"]
 
 [params]
 

@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://bht6w3yxa6mc1"
-path="res://.godot/imported/Comic Kids.ttf-85bdea5e5b0a89cfa86c86881067f85a.fontdata"
+path="res://.godot/imported/Comic Kids.ttf-7471f23e5a57ed086b6e83034283a0d9.fontdata"
 
 [deps]
 
-source_file="res://WAWP/ui/themes/Comic Kids.ttf"
-dest_files=["res://.godot/imported/Comic Kids.ttf-85bdea5e5b0a89cfa86c86881067f85a.fontdata"]
+source_file="res://ui/themes/Comic Kids.ttf"
+dest_files=["res://.godot/imported/Comic Kids.ttf-7471f23e5a57ed086b6e83034283a0d9.fontdata"]
 
 [params]
 
