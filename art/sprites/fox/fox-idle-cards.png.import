@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c4np02qvmo1rl"
-path.s3tc="res://.godot/imported/fox-idle-cards.png-659c3ceef188f542045440b86e4c23a7.s3tc.ctex"
+path.s3tc="res://.godot/imported/fox-idle-cards.png-5d9d33c97a13d880e5467e3672426910.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://WAWP/art/sprites/fox/fox-idle-cards.png"
-dest_files=["res://.godot/imported/fox-idle-cards.png-659c3ceef188f542045440b86e4c23a7.s3tc.ctex"]
+source_file="res://art/sprites/fox/fox-idle-cards.png"
+dest_files=["res://.godot/imported/fox-idle-cards.png-5d9d33c97a13d880e5467e3672426910.s3tc.ctex"]
 
 [params]
 
