@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://22ngaemtxjr2"
-path="res://.godot/imported/WAWP v1.icon.png-3141da097514773d859d7842c33c2d05.ctex"
+uid="uid://baeim3857ynox"
+path="res://.godot/imported/kerenel_Cards.png-ab7b3db38a5e770c226e0f9d1a9db30d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Exports/V3/WAWP v1.icon.png"
-dest_files=["res://.godot/imported/WAWP v1.icon.png-3141da097514773d859d7842c33c2d05.ctex"]
+source_file="res://WAWP/art/sprites/cards/kerenel_Cards.png"
+dest_files=["res://.godot/imported/kerenel_Cards.png-ab7b3db38a5e770c226e0f9d1a9db30d.ctex"]
 
 [params]
 

@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cd2cixcshmr3w"
-path="res://.godot/imported/LeslieCrayon-Bold.ttf-e30829a8282331044916c22185a2b033.fontdata"
+uid="uid://c17n0bw66h842"
+path="res://.godot/imported/LeslieCrayon-Regular.ttf-d42c26b6004a4ac20353b141eef7b53d.fontdata"
 
 [deps]
 
-source_file="res://ui/themes/LeslieCrayon-Bold.ttf"
-dest_files=["res://.godot/imported/LeslieCrayon-Bold.ttf-e30829a8282331044916c22185a2b033.fontdata"]
+source_file="res://WAWP/ui/themes/LeslieCrayon-Regular.ttf"
+dest_files=["res://.godot/imported/LeslieCrayon-Regular.ttf-d42c26b6004a4ac20353b141eef7b53d.fontdata"]
 
 [params]
 

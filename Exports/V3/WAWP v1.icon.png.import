@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4fgffnk5vb2v"
-path="res://.godot/imported/WAWP v1.png-8b25f48681862ee9ef35f9849c58acdb.ctex"
+uid="uid://22ngaemtxjr2"
+path="res://.godot/imported/WAWP v1.icon.png-fa2cdcc941f6b0ec823d4daf70f84219.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Exports/V3/WAWP v1.png"
-dest_files=["res://.godot/imported/WAWP v1.png-8b25f48681862ee9ef35f9849c58acdb.ctex"]
+source_file="res://releases/Exports/V3/WAWP v1.icon.png"
+dest_files=["res://.godot/imported/WAWP v1.icon.png-fa2cdcc941f6b0ec823d4daf70f84219.ctex"]
 
 [params]
 

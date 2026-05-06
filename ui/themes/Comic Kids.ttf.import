@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://c17n0bw66h842"
-path="res://.godot/imported/LeslieCrayon-Regular.ttf-42af70cc99f305835312545a11fe0e44.fontdata"
+uid="uid://bht6w3yxa6mc1"
+path="res://.godot/imported/Comic Kids.ttf-85bdea5e5b0a89cfa86c86881067f85a.fontdata"
 
 [deps]
 
-source_file="res://ui/themes/LeslieCrayon-Regular.ttf"
-dest_files=["res://.godot/imported/LeslieCrayon-Regular.ttf-42af70cc99f305835312545a11fe0e44.fontdata"]
+source_file="res://WAWP/ui/themes/Comic Kids.ttf"
+dest_files=["res://.godot/imported/Comic Kids.ttf-85bdea5e5b0a89cfa86c86881067f85a.fontdata"]
 
 [params]
 

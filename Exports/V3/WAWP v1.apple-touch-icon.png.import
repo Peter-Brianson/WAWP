@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://baeim3857ynox"
-path="res://.godot/imported/kerenel_Cards.png-951d0aaec118cc75a32b3f41e757d327.ctex"
+uid="uid://b8drsnj83pc7w"
+path="res://.godot/imported/WAWP v1.apple-touch-icon.png-526506a840bf64421c8df6ddb157c524.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/sprites/cards/kerenel_Cards.png"
-dest_files=["res://.godot/imported/kerenel_Cards.png-951d0aaec118cc75a32b3f41e757d327.ctex"]
+source_file="res://releases/Exports/V3/WAWP v1.apple-touch-icon.png"
+dest_files=["res://.godot/imported/WAWP v1.apple-touch-icon.png-526506a840bf64421c8df6ddb157c524.ctex"]
 
 [params]
 

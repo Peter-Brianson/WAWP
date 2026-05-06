@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://7tykvtihhg3x"
-path="res://.godot/imported/HooeyDEMO-Regular.otf-fd3494f1b7ca8f3bb268f5035f81f85d.fontdata"
+uid="uid://cd2cixcshmr3w"
+path="res://.godot/imported/LeslieCrayon-Bold.ttf-158752f3a3f12efabc374ce58ac45aa6.fontdata"
 
 [deps]
 
-source_file="res://ui/themes/HooeyDEMO-Regular.otf"
-dest_files=["res://.godot/imported/HooeyDEMO-Regular.otf-fd3494f1b7ca8f3bb268f5035f81f85d.fontdata"]
+source_file="res://WAWP/ui/themes/LeslieCrayon-Bold.ttf"
+dest_files=["res://.godot/imported/LeslieCrayon-Bold.ttf-158752f3a3f12efabc374ce58ac45aa6.fontdata"]
 
 [params]
 

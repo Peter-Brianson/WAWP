@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://k8mifgwba1vg"
-path="res://.godot/imported/Kitto-PersonalUse.otf-23b1ed01f7bff33c9b8e30509e04024b.fontdata"
+uid="uid://box80vg5l8sir"
+path="res://.godot/imported/Your Doodle Font.otf-5f86d7e895393f91859ee315d90687e3.fontdata"
 
 [deps]
 
-source_file="res://ui/themes/Kitto-PersonalUse.otf"
-dest_files=["res://.godot/imported/Kitto-PersonalUse.otf-23b1ed01f7bff33c9b8e30509e04024b.fontdata"]
+source_file="res://WAWP/ui/themes/Your Doodle Font.otf"
+dest_files=["res://.godot/imported/Your Doodle Font.otf-5f86d7e895393f91859ee315d90687e3.fontdata"]
 
 [params]
 

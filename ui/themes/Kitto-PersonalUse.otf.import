@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bht6w3yxa6mc1"
-path="res://.godot/imported/Comic Kids.ttf-7471f23e5a57ed086b6e83034283a0d9.fontdata"
+uid="uid://k8mifgwba1vg"
+path="res://.godot/imported/Kitto-PersonalUse.otf-a617a48119e722db08010700e68575f4.fontdata"
 
 [deps]
 
-source_file="res://ui/themes/Comic Kids.ttf"
-dest_files=["res://.godot/imported/Comic Kids.ttf-7471f23e5a57ed086b6e83034283a0d9.fontdata"]
+source_file="res://WAWP/ui/themes/Kitto-PersonalUse.otf"
+dest_files=["res://.godot/imported/Kitto-PersonalUse.otf-a617a48119e722db08010700e68575f4.fontdata"]
 
 [params]
 
